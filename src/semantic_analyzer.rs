@@ -21,7 +21,7 @@ impl SemanticAnalyzer {
             NodeType::Identifier(id) => {
                 // In a real system, this would look up the symbol table for the type
                 println!("Analyzing Identifier: {}", id);
-                Ok(Type::Unknown)
+                Ok(Type::Boolean)
             },
             NodeType::UnknownNode => {
                 Err("Semantic Error: Encountered an unknown node type during analysis.".to_string())
