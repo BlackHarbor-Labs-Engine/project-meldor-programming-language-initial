@@ -9,12 +9,11 @@ mod malformed_input_tests {
     #[test]
     fn test_malformed_input_1() {
         // Test malformed input scenario 1
-    }
+        assert_eq!(parse("malformed_input_1"), Err(ParseError::MalformedInput));
 
     #[test]
     fn test_malformed_input_2() {
-        // Test malformed input scenario 2
-    }
+        assert_eq!(parse("malformed_input_2"), Err(ParseError::MalformedInput));
 
     // Add more tests as needed
 }
