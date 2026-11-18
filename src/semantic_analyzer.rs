@@ -1,6 +1,6 @@
 use crate::syntax::{NodeType, LiteralNode;
 
-use crate::syntax::SyntaxNode;
+use crate::syntax::{NodeType, LiteralNode};
 
 pub fn analyze_syntax_nodes(nodes: &[SyntaxNode]) -> Result<(), String> {
     for node in nodes {
