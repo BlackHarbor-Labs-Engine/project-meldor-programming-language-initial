@@ -29,10 +29,10 @@ impl SemanticAnalyzer {
                     let expected_type = self.types.get(&name).cloned().unwrap_or(Type::Unknown);
                     
                     // Determine actual type based on the value node's kind
-                    let actual_type = match &*value_node.kind {
+                    let actual_type = match &value_node.kind {
                         NodeType::Literal(Literal { value: Value::String(_) }) => Type::String,
                         NodeType::Literal(Literal { value: Value::Int(_) }) => Type::Int,
-                        NodeType::Identifier(id) => self.types.get(id).cloned().unwrap_or(Type::Unknown),
+                        NodeType::Identifier(id) => self.types.get(&id).cloned().unwrap_or(Type::Unknown),
                         _ => Type::Unknown,
                     };
 
@@ -43,7 +43,7 @@ impl SemanticAnalyzer {
                 NodeType::BinaryOp { left, op, right } => {
                     // In a real system, we'd recursively check types here.
                     // For now, we just ensure operands are not unknown.
-                    if matches!(&**left.kind, NodeType::UnknownNode) || matches!(&**right.kind, NodeType::UnknownNode) {
+                    if matches!(&left.kind, NodeType::UnknownNode) || matches!(&right.kind, NodeType::UnknownNode) {
                         return Err("Semantic Error: Binary operation involves an unknown node.".to_string());
                     }
                 }

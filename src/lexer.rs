@@ -127,7 +127,7 @@ impl Lexer {
 }
 
 #[derive(Debug, PartialEq)]
-enum Token {
+pub enum Token {
     Identifier(String),
     Number(i32),
     Plus,

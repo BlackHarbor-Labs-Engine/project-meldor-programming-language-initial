@@ -5,7 +5,7 @@ pub fn analyze(node: &SyntaxNode) -> Result<(), String> {
     match &node.kind {
         NodeType::BinaryOp { left, op, right } => {
             // Basic check: ensure operands are not unknown nodes
-            if matches!(&**left.kind, NodeType::UnknownNode) || matches!(&**right.kind, NodeType::UnknownNode) {
+            if matches!(&left.kind, NodeType::UnknownNode) || matches!(&right.kind, NodeType::UnknownNode) {
                 return Err("Semantic Error: Binary operation involves an unknown node.".to_string());
             }
             // In a real implementation, we would check types here.

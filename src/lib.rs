@@ -2,6 +2,7 @@ pub mod lexer;
 pub mod parser;
 pub mod semantic_analyzer;
 pub mod runtime;
+pub mod engine;
 pub mod ir;
 pub mod analyze;
 pub mod state_machine;
@@ -13,7 +14,7 @@ pub use parser::Parser;
 pub use semantic_analyzer::SemanticAnalyzer;
 pub use runtime::Runtime;
 pub use ir::IR;
-pub use syntax::Analyzer;
+
 pub use state_machine::StateMachine;
 pub use malware_engine::MalwareEngine;
-pub use syntax::SyntaxNode;
+pub use syntax::{SyntaxNode, Type};
