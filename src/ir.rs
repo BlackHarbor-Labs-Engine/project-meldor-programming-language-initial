@@ -1,4 +1,4 @@
-use crate::syntax::{Type, SyntaxNode}; // Keep this for now, assuming SyntaxNode is defined elsewhere
+use crate::syntax::Type; // Keep this for now, assuming SyntaxNode is defined elsewhere
 
 // Define IrInstruction
 pub struct IrInstruction {
