@@ -5,3 +5,6 @@ edition = "2021"
 
 [dependencies]
 nom = "8.0.0"
+
+[build-dependencies]
+// Add any build dependencies here
