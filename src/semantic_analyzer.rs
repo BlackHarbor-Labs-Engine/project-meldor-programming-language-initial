@@ -4,7 +4,7 @@
 
 use std::collections::HashMap;
 
-use crate::syntax::{SyntaxNode, Type};
+use crate::syntax::{SyntaxNode, Type, Literal};
 
 /// Represents a semantic analyzer that tracks types of variables and functions.
 pub struct SemanticAnalyzer {
@@ -31,9 +31,9 @@ impl SemanticAnalyzer {
                 }
                 SyntaxNode::Assignment { name, value_node } => {
                     let expected_type = self.types.get(&name).cloned().unwrap_or(Type::Unknown);
-                    let actual_type = match value_node {
-                        SyntaxNode::Literal { value, .. } => Type::Int, // Simplified for now
-                        SyntaxNode::Identifier(id) => self.types.get(&id).cloned().unwrap_or(Type::Unknown),
+                    let actual_type = match &*value_node {
+                        SyntaxNode::Literal(Literal::String(_)) => Type::String, // Assuming string literals are strings for now
+                        SyntaxNode::Identifier(id) => self.types.get(&id.to_string()).cloned().unwrap_or(Type::Unknown),
                         _ => Type::Unknown,
                     };
 
@@ -69,7 +69,7 @@ mod tests {
         analyzer.types.insert("x".to_string(), Type::Int);
         let nodes = vec![SyntaxNode::Assignment {
             name: "x".to_string(),
-            value_node: SyntaxNode::Literal { value: "hello".to_string(), ..Default::default() }
+            value_node: SyntaxNode::Literal(Literal::String("hello".to_string()))
         }];
         let result = analyzer.analyze_syntax_nodes(nodes);
         assert!(result.is_err());

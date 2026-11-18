@@ -8,7 +8,7 @@ pub enum Type {
     Int,
     Bool,
     String,
-    Custom(String),
+    Custom(String), Unknown,
 }
 
 // --- Core AST Node Definition ---

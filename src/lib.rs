@@ -13,7 +13,7 @@ pub use parser::Parser;
 pub use semantic_analyzer::SemanticAnalyzer;
 pub use interpreter::Interpreter;
 pub use ir::IR;
-pub use analyze::Analyzer;
+pub use syntax::Analyzer;
 pub use state_machine::StateMachine;
 pub use malware_engine::MalwareEngine;
 pub use syntax::SyntaxNode;
