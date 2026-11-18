@@ -1,7 +1,7 @@
 pub mod lexer;
 pub mod parser;
 pub mod semantic_analyzer;
-pub mod interpreter;
+pub mod runtime;
 pub mod ir;
 pub mod analyze;
 pub mod state_machine;
@@ -11,7 +11,7 @@ pub mod syntax;
 pub use lexer::Lexer;
 pub use parser::Parser;
 pub use semantic_analyzer::SemanticAnalyzer;
-pub use interpreter::Interpreter;
+pub use runtime::Runtime;
 pub use ir::IR;
 pub use syntax::Analyzer;
 pub use state_machine::StateMachine;

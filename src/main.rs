@@ -1,4 +1,5 @@
-use meldor::{lexer, parser, semantic_analyzer, ir};
+use meldor::{lexer, parser, runtime, malware_engine, ir};
+use meldor::syntax::SyntaxNode;
 // use meldor::syntax::SyntaxNode;
 
 fn main() {
@@ -10,14 +11,15 @@ fn main() {
     let syntax_tree = parser::parse_statement(input).unwrap();
     println!("Syntax Tree: {:?}", syntax_tree);
 
-    let mut analyzer = semantic_analyzer::SemanticAnalyzer::new();
+    let malware_engine = malware_engine::MalwareEngine::new();
     // Create a dummy vector of SyntaxNode to satisfy the API
     let nodes = vec![];
     let result = analyzer.analyze_syntax_nodes(nodes);
     println!("Analysis Result: {:?}", result);
 
-    let mut builder = ir::IrBuilder::new();
+    let builder = ir::IrBuilder::new();
     // In a real implementation, we'd use the actual syntax tree here
-    let ir_result = builder.from_syntax(syntax_tree);
+    let mut runtime = runtime::Runtime::new(malware_engine, builder);
+let runtime_result = runtime.run(&syntax_tree);
     println!("IR Result: {:?}", ir_result);
 }
