@@ -250,7 +250,7 @@ impl IrBuilder {
                         span: Span::new(1, 1, 0, 2),
                     });
                 },
-                SyntaxNode::Literal { value, .. } => {
+                SyntaxNode::Literal { value, span } => {
                     // Handle literal values
                     let ty = if value.starts_with('"') {
                         IrType::string()
@@ -264,12 +264,9 @@ impl IrBuilder {
                     self.add_node(IrNode::Literal {
                         value,
                         ty,
-                        span: Span::new(1, 1, 0, 2),
+                        span,
                     });
                 },
-                _ => {
-                    // Handle other node types as needed
-                }
             }
         }
         Ok(())
