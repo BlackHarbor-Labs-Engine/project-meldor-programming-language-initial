@@ -12,11 +12,29 @@ impl Span {
     }
 }
 
+use std::fmt;
+
 #[derive(Debug, Clone)]
 pub enum SyntaxNode {
     Keyword(String),
     Literal { value: String, span: Span },
     Identifier(String),
+}
+
+impl fmt::Display for SyntaxNode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            SyntaxNode::Keyword(s) => write!(f, "{}", s),
+            SyntaxNode::Literal { value, .. } => write!(f, "{}", value),
+            SyntaxNode::Identifier(s) => write!(f, "{}", s),
+        }
+    }
+}
+
+impl std::string::ToString for SyntaxNode {
+    fn to_string(&self) -> String {
+        self.to_string()
+    }
 }
 
 // This function is not used in the current code but we'll keep it for completeness

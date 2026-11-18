@@ -1,19 +1,25 @@
+// Copyright (c) 2024 Harbour Software Labs LTD
+
+use crate::syntax::{SyntaxNode, Span};
+use std::collections::HashMap;
+
+#[derive(Debug, Clone)]
+pub struct Scope<'a> {
+    pub name: &'a str,
+    pub variables: HashMap<String, String>,
+}
+
 pub struct SemanticAnalyzer<'a> {
-    scopes: Vec<Scope<'a, 'a>>, // Define fields here
-    nodes: HashMap<String, Vec<String>>, // Define fields here
+    scopes: Vec<Scope<'a>>,
+    nodes: HashMap<String, Vec<String>>,
 }
 
 impl<'a> SemanticAnalyzer<'a> {
-    pub fn new() -> SemanticAnalyzer<'a> {
+    pub fn new() -> Self {
         SemanticAnalyzer {
             scopes: Vec::new(),
             nodes: HashMap::new(),
         }
-    }
-
-    pub fn analyze(&self, tokens: &[&str]) -> Result<(), String> {
-        // Implement analyze method here
-        Ok(())
     }
 
     pub fn push_scope(&mut self, name: &'a str) {
@@ -24,13 +30,13 @@ impl<'a> SemanticAnalyzer<'a> {
         self.scopes.push(scope);
     }
 
-    pub fn pop_scope(&mut self) -> Option<Scope<'a, 'a>> {
+    pub fn pop_scope(&mut self) -> Option<Scope<'a>> {
         self.scopes.pop()
     }
 
-    pub fn add_variable(&mut self, name: &'a str, value: String) {
+    pub fn add_variable(&mut self, name: &str, value: String) {
         if let Some(scope) = self.scopes.last_mut() {
-            scope.variables.insert(name, value);
+            scope.variables.insert(name.to_string(), value);
         }
     }
 
@@ -51,9 +57,9 @@ impl<'a> SemanticAnalyzer<'a> {
         self.nodes.get(key)
     }
 
-    pub fn analyze(&mut self, nodes: Vec<SyntaxNode>) -> Result<(), String> {
+    pub fn analyze_syntax_nodes(&mut self, nodes: Vec<SyntaxNode>) -> Result<(), String> {
         // Basic semantic analysis: validate syntax nodes and build scope
-        for node in nodes.iter() {
+        for node in &nodes {  // Changed to avoid lifetime issues
             match node {
                 SyntaxNode::Keyword(kw) => {
                     // Validate known keywords
