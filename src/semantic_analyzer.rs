@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use crate::syntax::{SyntaxNode, Span};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Type {
     pub name: String,
     pub fields: Vec<(String, Type)>, // For structs
@@ -63,6 +63,29 @@ impl Scope {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct DependencyGraph {
+    nodes: HashMap<String, Vec<String>>,
+}
+
+impl DependencyGraph {
+    pub fn new() -> Self {
+        DependencyGraph { nodes: HashMap::new() }
+    }
+
+    pub fn add_node(&mut self, node: String) {
+        self.nodes.entry(node).or_insert_with(Vec::new);
+    }
+
+    pub fn add_edge(&mut self, from: String, to: String) {
+        self.nodes.entry(from).or_insert_with(Vec::new).push(to);
+    }
+
+    pub fn get_nodes(&self) -> &HashMap<String, Vec<String>> {
+        &self.nodes
+    }
+}
+
 pub struct SemanticAnalyzer {
     scopes: Vec<Scope>,
     types: HashMap<String, Type>,
@@ -112,14 +135,14 @@ impl SemanticAnalyzer {
     }
 
     fn first_pass(&mut self, nodes: &Vec<SyntaxNode>) -> Result<(), String> {
-        let mut graph = DependencyGraph::new();
+        let _graph = DependencyGraph::new();
         for node in nodes {
             match node {
-                SyntaxNode::Keyword { value, .. } if value == "fn" => {
+                SyntaxNode::Keyword(value) if value == "fn" => {
                     // Function declaration
                     self.enter_scope();
                 }
-                SyntaxNode::Keyword { value, .. } if value == "let" => {
+                SyntaxNode::Keyword(value) if value == "let" => {
                     // Variable declaration
                     // We'll handle this in second pass for now
                 }
@@ -132,36 +155,82 @@ impl SemanticAnalyzer {
     fn second_pass(&mut self, nodes: &Vec<SyntaxNode>) -> Result<(), String> {
         for node in nodes {
             match node {
-                SyntaxNode::Keyword { value, span } if value == "let" => {
+                SyntaxNode::Keyword(value) if value == "let" => {
                     // This is a simplified version - in practice you'd parse the assignment
                     // and check type compatibility here
-                    println!("Analyzing let statement at {:?}", span);
+                    println!("Analyzing let statement at {:?}", Span::new(0, 0, 0, 0));
                 }
                 _ => {}
             }
         }
         Ok(())
     }
+}
 
-    struct DependencyGraph {
-        nodes: HashMap<String, Vec<String>>,
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_dependency_graph_new() {
+        let graph = DependencyGraph::new();
+        assert!(graph.get_nodes().is_empty());
     }
 
-    impl DependencyGraph {
-        fn new() -> Self {
-            DependencyGraph { nodes: HashMap::new() }
-        }
+    #[test]
+    fn test_dependency_graph_add_node() {
+        let mut graph = DependencyGraph::new();
+        graph.add_node("A".to_string());
+        assert!(graph.get_nodes().contains_key("A"));
+    }
 
-        fn add_node(&mut self, node: String) {
-            self.nodes.entry(node).or_insert_with(Vec::new);
-        }
+    #[test]
+    fn test_dependency_graph_add_edge() {
+        let mut graph = DependencyGraph::new();
+        graph.add_node("A".to_string());
+        graph.add_edge("A".to_string(), "B".to_string());
+        assert_eq!(graph.get_nodes().get("A"), Some(&vec!["B".to_string()]));
+    }
 
-        fn add_edge(&mut self, from: String, to: String) {
-            self.nodes.entry(from).or_insert_with(Vec::new).push(to);
-        }
+    #[test]
+    fn test_scope_new() {
+        let scope = Scope::new();
+        assert!(scope.variables.is_empty());
+        assert!(scope.parent.is_none());
+    }
 
-        fn get_nodes(&self) -> &HashMap<String, Vec<String>> {
-            &self.nodes
-        }
+    #[test]
+    fn test_scope_with_parent() {
+        let parent = Scope::new();
+        let child = Scope::with_parent(parent);
+        assert!(child.variables.is_empty());
+        assert!(child.parent.is_some());
+    }
+
+    #[test]
+    fn test_scope_get() {
+        let mut scope = Scope::new();
+        let ty = Type::new("i32");
+        scope.insert("x".to_string(), ty.clone());
+        
+        assert_eq!(scope.get("x"), Some(&ty));
+        assert_eq!(scope.get("y"), None);
+    }
+
+    #[test]
+    fn test_scope_get_in_parent() {
+        let mut parent = Scope::new();
+        let ty = Type::new("i32");
+        parent.insert("x".to_string(), ty.clone());
+        
+        let child = Scope::with_parent(parent);
+        assert_eq!(child.get("x"), Some(&ty));
+    }
+
+    #[test]
+    fn test_semantic_analyzer_new() {
+        let analyzer = SemanticAnalyzer::new();
+        assert_eq!(analyzer.scopes.len(), 1);
+        assert!(analyzer.types.is_empty());
     }
 }

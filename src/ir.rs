@@ -60,6 +60,11 @@ pub enum IrNode {
         value: Option<Box<IrNode>>,
         span: Span,
     },
+    /// Variable use node
+    VariableUse {
+        name: String,
+        span: Span,
+    },
 }
 
 /// Represents a type in the IR.
@@ -216,31 +221,54 @@ impl IrBuilder {
 
     /// Convert syntax nodes to IR nodes
     pub fn from_syntax(&mut self, syntax_nodes: Vec<SyntaxNode>) -> Result<(), String> {
-        // This is a simplified conversion - in practice, this would be more complex
         for node in syntax_nodes {
             match node {
-                SyntaxNode::Keyword(value) => {
-                    if let SyntaxNode::Keyword(value) = node { if value == "fn" {
-                        // Function definition
+                SyntaxNode::Keyword(ref value) => {
+                    if *value == "fn" {
+                        // Function definition placeholder
                         self.add_node(IrNode::FunctionDef {
                             name: String::new(),
                             params: Vec::new(),
                             return_type: IrType::void(),
                             body: Vec::new(),
-                            span,
+                            span: Span::new(1, 1, 0, 2),
                         });
-                    } else } else if let SyntaxNode::Keyword(value) = node { if value == "let" { }
-                        // Variable declaration
+                    } else if *value == "let" {
+                        // Variable declaration placeholder
                         self.add_node(IrNode::VarDecl {
                             name: String::new(),
                             ty: IrType::int(),
                             initializer: None,
-                            span,
+                            span: Span::new(1, 1, 0, 2),
                         });
                     }
                 },
+                SyntaxNode::Identifier(ref name) => {
+                    // Placeholder for identifier usage
+                    self.add_node(IrNode::VariableUse {
+                        name: name.clone(),
+                        span: Span::new(1, 1, 0, 2),
+                    });
+                },
+                SyntaxNode::Literal { value, .. } => {
+                    // Handle literal values
+                    let ty = if value.starts_with('"') {
+                        IrType::string()
+                    } else if value.parse::<i64>().is_ok() {
+                        IrType::int()
+                    } else if value.parse::<f64>().is_ok() {
+                        IrType::float()
+                    } else {
+                        return Err(format!("Unknown literal type: {}", value));
+                    };
+                    self.add_node(IrNode::Literal {
+                        value,
+                        ty,
+                        span: Span::new(1, 1, 0, 2),
+                    });
+                },
                 _ => {
-                    // Handle literals and other nodes as needed
+                    // Handle other node types as needed
                 }
             }
         }
@@ -294,7 +322,7 @@ mod tests {
             }),
             span: Span::new(1, 1, 0, 2),
         });
-        
+
         let result = builder.validate();
         assert!(result.is_err());
     }

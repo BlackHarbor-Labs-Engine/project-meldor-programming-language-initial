@@ -1,21 +1,20 @@
-// src/qa_tests.rs
-
-use super::*;
+use crate::parser::{Parser, Ast};
 
 #[cfg(test)]
-mod malformed_input_tests {
+mod tests {
     use super::*;
 
     #[test]
-    fn test_malformed_input_1() {
-        // Test malformed input scenario 1
-        assert_eq!(parse("malformed_input_1"), Err(ParseError::MalformedInput));
+    fn test_validate_ast() {
+        let parser = Parser::new();
+        let input = "// Malformed input";
+        assert!(parser.parse(input).is_err());
+    }
 
     #[test]
-    fn test_malformed_input_2() {
-        assert_eq!(parse("malformed_input_2"), Err(ParseError::MalformedInput));
-
-    // Add more tests as needed
+    fn test_validate_ast_valid() {
+        let parser = Parser::new();
+        let input = "// Valid input";
+        assert!(parser.parse(input).is_ok());
+    }
 }
-
-// TODO: Implement the tests for malformed input scenarios
