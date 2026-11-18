@@ -27,7 +27,7 @@ impl Error for ParseError {}
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Type {
-    Int,
+    Integer,
     String,
     Bool,
     Unknown,
@@ -40,6 +40,19 @@ pub enum Value {
     Bool(bool),
 }
 
+// --- Operator Definitions ---
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum Op {
+    Add,
+    Subtract,
+    Multiply,
+    Divide,
+    Equal,
+    NotEqual,
+    // Add other operators as needed
+}
+
 // --- Node Types and AST ---
 
 #[derive(Debug, Clone, PartialEq)]
@@ -47,23 +60,10 @@ pub enum NodeType {
     // Structural Nodes
     Declaration { name: String, ty: Type },
     Assignment { name: String, value_node: Box<SyntaxNode> },
-    BinaryOp { left: Box<SyntaxNode>, right: Box<SyntaxNode>, op: String },
+    BinaryOp { left: Box<SyntaxNode>, right: Box<SyntaxNode>, op: Op }, // Changed String to Op
     Literal(LiteralNode),
     Identifier(String),
     UnknownNode,
-}
-
-// --- Token Definitions (FIXED) ---
-
-#[derive(Debug, Clone, PartialEq)]
-pub enum TokenKind {
-    Identifier(String),
-    Literal(LiteralNode),
-    Operator(String),
-    LParen,
-    RParen,
-    // Primitive tokens only
-    Unknown, 
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -75,7 +75,7 @@ impl SyntaxNode {
     /// Recursively determines the resulting Type of this node.
     pub fn get_type(&self) -> Type {
         match &self.kind {
-            NodeType::Literal(LiteralNode::Integer(_)) => Type::Int,
+            NodeType::Literal(LiteralNode::Integer(_)) => Type::Integer,
             NodeType::Literal(LiteralNode::String(_)) => Type::String,
             NodeType::Identifier(_) => Type::Unknown, // Needs symbol table context for real resolution
             NodeType::Declaration { ty, .. } => ty.clone(),

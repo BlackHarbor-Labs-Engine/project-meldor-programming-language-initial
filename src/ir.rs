@@ -1,3 +1,4 @@
+// src/ir.rs
 use crate::syntax::Type; // Keep this for now, assuming SyntaxNode is defined elsewhere
 
 // Define IrInstruction
@@ -49,31 +50,28 @@ impl IrBuilder {
             match instruction.op.as_str() {
                 "ADD" | "SUB" | "MUL" | "DIV" => {
                     if instruction.operands.len() != 2 {
-                        return Err(format!("Structural Error at instruction {}: Binary operation '{}' requires exactly 2 operands, found {}.", i, instruction.op, instruction.operands.len()));
+                        return Err(format!("Structural Error at instruction {}: Binary operation '{}' requires exactly 2 operands, found {}", i, instruction.op, instruction.operands.len()));
                     }
                 },
                 "LOAD_CONST" => {
                     if instruction.operands.len() != 1 {
-                        return Err(format!("Structural Error at instruction {}: LOAD_CONST requires exactly 1 operand, found {}.", i, instruction.op, instruction.operands.len()));
+                        return Err(format!("Structural Error at instruction {}: LOAD_CONST requires exactly 1 operand, found {}", i, instruction.op, instruction.operands.len()));
                     }
                 },
                 "JUMP" => {
                     if instruction.operands.len() != 1 {
-                        return Err(format!("Structural Error at instruction {}: JUMP requires exactly 1 operand (target address), found {}.", i, instruction.op, instruction.operands.len()));
+                        return Err(format!("Structural Error at instruction {}: JUMP requires exactly 1 operand (target address), found {}", i, instruction.op, instruction.operands.len()));
                     }
                     // Low-level control flow check: Ensure jump target is within bounds [0, N-1]
                     // We must assume Type can be treated as a comparable index for this check to pass compilation/logic.
-                    if let Some(target_type) = instruction.operands.get(0) {
-                        // SAFETY: This relies on Type implementing comparison traits or being convertible to usize.
-                        // Since we cannot guarantee that, we perform a conceptual check.
-                        // In a real scenario, Type would be an index or we'd use a dedicated Index type.
-                        // For this simulation, we check if the operand is not logically 'too big'.
-                        // If Type were usize, we'd check: if *target_type.as_usize() >= self.instructions.len() {
-                        // Given the constraints, we enforce the count check and flag the potential issue.
-                        // If we assume Type is an index, we check bounds:
-                        if instruction.operands.len() == 1 && i < self.instructions.len() - 1 { // Simplified bounds check for simulation
-                            // A proper implementation would require Type to be convertible to usize.
-                        }
+                    // Since we cannot guarantee that, we perform a conceptual check.
+                    // In a real scenario, Type would be an index or we'd use a dedicated Index type.
+                    // For this simulation, we check if the operand is not logically 'too big'.
+                    // If Type were usize, we'd check: if *target_type.as_usize() >= self.instructions.len() {
+                    // Given the constraints, we enforce the count check and flag the potential issue.
+                    // If we assume Type is an index, we check bounds:
+                    if instruction.operands.len() == 1 && i < self.instructions.len() - 1 { // Simplified bounds check for simulation
+                        // A proper implementation would require Type to be convertible to usize.
                     }
                 },
                 _ => {}
@@ -98,29 +96,12 @@ impl IrBuilder {
         if let Some(tag) = &instruction.instrumentation_tag {
             // Neutralizing low-level vectors: Check for general injection/overflow/shell commands
             if tag.contains("INJECT") || tag.contains("OVERFLOW") || tag.contains("SHELL") {
-                self.log_event(&format!("!!! CRITICAL: Detected potential exploit vector via tag: {}", tag));
-                return false; // Trigger validation failure
+                self.log_event(&format!("!!! SECURITY ALERT: Potential vector detected via tag: {}", tag));
+                return false;
             }
         }
 
-        // Edge Case 2: Check for unusual operand combinations (Retaining original logic)
-        if instruction.operands.len() > 5 {
-            self.log_event(&format!("WARNING: Instruction {} has excessive operands: {}", instruction.op, instruction.operands.len()));
-        }
-
-        // Simulate successful execution path
-        self.log_event(&format!("Successfully executed instruction: {}", instruction.op));
+        // Placeholder for other complex checks (e.g., type checking against operands)
         true
-    }
-}
-
-// Define the top-level IR structure to satisfy pub use ir::IR;
-pub struct IR {
-    pub builder: IrBuilder,
-}
-
-impl IR {
-    pub fn new() -> Self {
-        IR { builder: IrBuilder::new() }
     }
 }

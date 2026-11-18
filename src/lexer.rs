@@ -2,7 +2,6 @@
 //! The lexer for the Meldor language.
 
 
-
 pub struct Lexer {
     input: String,
     position: usize,
@@ -42,10 +41,6 @@ impl Lexer {
         self.read_char();
     }
 
-    // This function was previously called incorrectly in the loop.
-    // We need a mechanism to loop until the input is exhausted.
-    // The original logic seemed to rely on next_token() being called repeatedly.
-    // I'm restructuring tokenize to be a loop that consumes all tokens.
     pub fn tokenize(&mut self) -> Vec<Token> {
         let mut tokens = Vec::new();
         while self.ch.is_some() {
@@ -55,9 +50,6 @@ impl Lexer {
         tokens
     }
 
-    // This function needs to be defined/adapted to return a single token
-    // and advance the state, which is what the original code seemed to imply
-    // when it was called inside the loop.
     fn next_token(&mut self) -> Token {
         let token = match self.ch {
             Some(ch) => {
@@ -72,8 +64,8 @@ impl Lexer {
                 } else {
                     self.read_special_token()
                 }
-            }
-            None => Token::Unknown, // Should not happen if called correctly
+            } else {
+                Token::Unknown // Should not happen if called correctly
         };
         // Crucially, advance after processing the token to move to the next character
         self.advance(); 
@@ -103,7 +95,8 @@ impl Lexer {
                 break;
             }
         }
-        Token::Number(number_str.parse().unwrap())
+        // FIX: Changed Number variant to Literal variant and cast to i64
+        Token::Literal(number_str.parse().unwrap() as i64)
     }
 
     fn read_special_token(&mut self) -> Token {
@@ -134,7 +127,7 @@ impl Lexer {
 #[derive(Debug, PartialEq)]
 pub enum Token {
     Identifier(String),
-    Number(i32),
+    Literal(i64),
     Plus,
     Minus,
     Multiply,
