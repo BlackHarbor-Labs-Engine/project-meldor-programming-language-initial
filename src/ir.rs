@@ -35,12 +35,51 @@ impl IrBuilder {
         &self.execution_log
     }
 
-    /// Attempts to process an instruction, validating against known exploit patterns.
+    /// Performs comprehensive structural validation on the entire bytecode sequence.
+    /// Returns Ok(()) if valid, or an Err(String) detailing the first structural error found.
+    pub fn validate_structure(&self) -> Result<(), String> {
+        for (i, instruction) in self.instructions.iter().enumerate() {
+            // Structural Check 1: Check for known invalid/reserved op codes
+            let reserved_ops = ["INVALID_OP", "HALT_FORCED", "RESERVED_V1"];
+            if reserved_ops.contains(&instruction.op.as_str()) {
+                return Err(format!("Structural Error at instruction {}: Found reserved or invalid opcode: {}", i, instruction.op));
+            }
+
+            // Structural Check 2: Check operand count based on operation type (Example logic)
+            match instruction.op.as_str() {
+                "ADD" | "SUB" | "MUL" | "DIV" => {
+                    if instruction.operands.len() != 2 {
+                        return Err(format!("Structural Error at instruction {}: Binary operation '{}' requires exactly 2 operands, found {}.", i, instruction.op, instruction.operands.len()));
+                    }
+                },
+                "LOAD_CONST" => {
+                    if instruction.operands.len() != 1 {
+                        return Err(format!("Structural Error at instruction {}: LOAD_CONST requires exactly 1 operand, found {}.", i, instruction.op, instruction.operands.len()));
+                    }
+                },
+                "JUMP" => {
+                    if instruction.operands.len() != 1 {
+                        return Err(format!("Structural Error at instruction {}: JUMP requires exactly 1 operand (target address), found {}.", i, instruction.op, instruction.operands.len()));
+                    }
+                },
+                _ => {}
+            }
+        }
+        Ok(())
+    }
+
+    /// Attempts to process an instruction, validating against known exploit patterns and structure.
     /// Returns true if processing was safe, false if an edge case/exploit vector was triggered.
     pub fn process_instruction(&mut self, instruction: &IrInstruction) -> bool {
         self.log_event(&format!("Processing instruction: {}", instruction.op));
 
-        // --- Exploit Injection Vector Validation Logic ---
+        // Check for reserved ops immediately
+        let reserved_ops = ["INVALID_OP", "HALT_FORCED", "RESERVED_V1"];
+        if reserved_ops.contains(&instruction.op.as_str()) {
+            self.log_event(&format!("!!! CRITICAL: Detected structural failure on instruction: {}", instruction.op));
+            return false;
+        }
+
         // Edge Case 1: Check for specific instrumentation tags that signal potential injection points.
         if let Some(tag) = &instruction.instrumentation_tag {
             if tag.contains("INJECT_SHELL") || tag.contains("OVERFLOW") {
@@ -49,10 +88,9 @@ impl IrBuilder {
             }
         }
 
-        // Edge Case 2: Check for unusual operand combinations (e.g., too many or specific types).
+        // Edge Case 2: Check for unusual operand combinations (Retaining original logic)
         if instruction.operands.len() > 5 {
             self.log_event(&format!("WARNING: Instruction {} has excessive operands: {}", instruction.op, instruction.operands.len()));
-            // For this validation, excessive operands are treated as a warning, not a failure, unless they hit a hard limit.
         }
 
         // Simulate successful execution path
