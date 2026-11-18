@@ -1,19 +1,7 @@
-<file path="src/analyze.rs">
+// Placeholder
 
-pub trait Analyzer {
-    fn analyze(&self, token: &str) -> Result<(), String>;
+// Implement malware detection logic here
+
+pub fn detect_malware(node: SyntaxNode) -> i32 {
+    0
 }
-
-// Implementation for SemanticAnalyzer
-
-use super::parser;
-
-pub struct SemanticAnalyzer;
-
-impl Analyzer for SemanticAnalyzer {
-    fn analyze(&self, token: &str) -> Result<(), String> {
-        // Placeholder for analysis logic
-        Ok(())
-    }
-}
-</file>

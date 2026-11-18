@@ -1,5 +1,7 @@
-// src/parser.rs
+// Placeholder
 
-use crate::syntax::{SyntaxNode, Span};
+// Implement the parser here
 
-// Other code...
+pub fn parse(input: &str) -> Result<SyntaxNode, String> {
+    Err("Parser not implemented".to_string())
+}
