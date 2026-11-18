@@ -4,27 +4,44 @@ use meldor::syntax::SyntaxNode;
 fn main() {
     let input = "let x = 5";
     
-    // 1. Lexing: Assuming Lexer::new(input) and tokenize() returns Result<Vec<Token>>
+    // 1. Lexing
+    println!("=== Lexing ===");
     let lexer = lexer::Lexer::new(input);
     let tokens = lexer.tokenize().unwrap();
     println!("Tokens: {:?}", tokens);
-    
-    // 2. Parsing: Assuming Parser::new() and parse(tokens) returns Result<SyntaxNode>
+
+    // 2. Parsing
+    println!("
+=== Parsing ===");
     let parser = parser::Parser::new();
     let syntax_tree = parser.parse(&tokens).unwrap();
     println!("Syntax Tree: {:?}", syntax_tree);
-    
-    // 3. Semantic Analysis
+
+    // 3. Engine Setup & Analysis
+    println!("
+=== Engine Setup & Analysis ===");
     let malware_engine = malware_engine::MalwareEngine::new();
-    // Create a dummy vector of SyntaxNode to satisfy the API
-    let nodes = vec![];
-    // Call the function directly, as it's now exported from semantic_analyzer
-    let analysis_result = semantic_analyzer::analyze(&nodes);
-    println!("Analysis Result: {:?}", analysis_result);
-    
-    // 4. IR Generation and Runtime
     let builder = ir::IrBuilder::new();
-    let mut runtime = runtime::Runtime::new(malware_engine, builder);
-    let runtime_result = runtime.run(&syntax_tree);
-    println!("IR Result: {:?}", runtime_result);
+    
+    let mut engine = engine::Engine::new(malware_engine, builder);
+    
+    // Perform semantic analysis and risk check
+    match engine.analyze_and_plan(&syntax_tree) {
+        Ok(_) => println!("Engine: Analysis and planning successful."),
+        Err(e) => { 
+            eprintln!("Engine Error during analysis: {}", e);
+            return;
+        }
+    }
+
+    // 4. Execution
+    println!("
+=== Execution ===");
+    match engine.execute(&syntax_tree) {
+        Ok(_) => println!("Execution finished successfully."),
+        Err(e) => { 
+            eprintln!("Engine Error during execution: {}", e);
+            return;
+        }
+    }
 }
