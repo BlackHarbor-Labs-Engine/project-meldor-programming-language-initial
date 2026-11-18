@@ -2,8 +2,8 @@
 
 | Name | Email | Role | Files |
 |---|---|---|---|
-| Pike | `pike@harbourlabs.dev` | ceo_boss | Cargo.toml, src/tests/test_lexer_parser.rs, src/tests/ir_tests.rs |
-| Has | `has@harbourlabs.dev` | vp_engineering | src/syntax.rs, src/main.rs, src/semantic_analyzer.rs, src/lib.rs, src/analyze.rs, src/interpreter.rs, src/malware_engine.rs, src/engine.rs |
+| Pike | `pike@harbourlabs.dev` | ceo_boss | src/syntax.rs, Cargo.toml, src/tests/test_lexer_parser.rs, src/tests/ir_tests.rs |
+| Has | `has@harbourlabs.dev` | vp_engineering | src/main.rs, src/semantic_analyzer.rs, src/lib.rs, src/analyze.rs, src/interpreter.rs, src/malware_engine.rs, src/engine.rs |
 | Cleo | `cleo@harbourlabs.dev` | reverse_engineer | src/ir.rs, build.rs, Cargo.lock, src/protocol_validator.rs |
 | Orin | `orin@harbourlabs.dev` | systems_dev | src/state_machine.rs, src/transport_layer.rs, src/runtime.rs |
 | Vex | `vex@harbourlabs.dev` | vp_reversing | src/analyzer.rs |
