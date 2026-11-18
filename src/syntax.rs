@@ -13,4 +13,4 @@
   77| 
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub struct Literal { /* ... rest of file ... */ }
+pub struct Literal { /* ... rest of file ... */ 
