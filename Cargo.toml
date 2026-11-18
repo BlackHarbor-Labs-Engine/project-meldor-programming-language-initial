@@ -6,4 +6,4 @@ edition = "2021"
 [dependencies]
 nom = "7.1.3"
 
-[build-dependencies]
+actix-web = "4.0.0"
