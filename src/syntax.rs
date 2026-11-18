@@ -37,6 +37,6 @@ pub enum SyntaxNode {
 
     // AST Structure
     Declaration { name: String, ty: Type },
-    Assignment { name: String, value_node: SyntaxNode },
+    Assignment { name: String, value_node: Box<SyntaxNode> },
     // ... other nodes like BinaryOp, FunctionCall, etc. would go here
 }

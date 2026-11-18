@@ -4,7 +4,7 @@
 
 use std::collections::HashMap;
 
-use crate::ir::{SyntaxNode, Type};
+use crate::syntax::{SyntaxNode, Type};
 
 /// Represents a semantic analyzer that tracks types of variables and functions.
 pub struct SemanticAnalyzer {
