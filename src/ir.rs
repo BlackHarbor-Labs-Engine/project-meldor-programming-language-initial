@@ -219,8 +219,8 @@ impl IrBuilder {
         // This is a simplified conversion - in practice, this would be more complex
         for node in syntax_nodes {
             match node {
-                SyntaxNode::Keyword(value, span) => {
-                    if let SyntaxNode::Keyword(value, span) = node { if value == "fn" {
+                SyntaxNode::Keyword(value) => {
+                    if let SyntaxNode::Keyword(value) = node { if value == "fn" {
                         // Function definition
                         self.add_node(IrNode::FunctionDef {
                             name: String::new(),
@@ -229,7 +229,7 @@ impl IrBuilder {
                             body: Vec::new(),
                             span,
                         });
-                    } else } else if let SyntaxNode::Keyword(value, _) = node { if value == "let" { }
+                    } else } else if let SyntaxNode::Keyword(value) = node { if value == "let" { }
                         // Variable declaration
                         self.add_node(IrNode::VarDecl {
                             name: String::new(),
