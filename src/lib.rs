@@ -5,7 +5,7 @@ pub mod syntax;
 pub mod lexer;
 
 pub mod parser;
-pub mod analyze;
+pub mod semantic_analyzer;
 pub mod ir;
 pub mod interpreter;
 
