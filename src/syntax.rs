@@ -31,11 +31,7 @@ impl fmt::Display for SyntaxNode {
     }
 }
 
-impl std::string::ToString for SyntaxNode {
-    fn to_string(&self) -> String {
-        self.to_string()
-    }
-}
+
 
 // This function is not used in the current code but we'll keep it for completeness
 pub fn parse_literal(input: &str) -> Result<(&str, SyntaxNode), SyntaxNode> {
