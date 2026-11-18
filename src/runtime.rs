@@ -2,7 +2,6 @@ use crate::engine::Engine;
 use crate::syntax::SyntaxNode;
 use crate::ir::IrBuilder;
 use crate::state_machine::{StateMachine, State};
-use std::fmt::Debug;
 
 /// Enhanced Taint Tracker to log execution paths for deep data flow tracing.
 pub struct TaintTracker {
@@ -81,27 +80,28 @@ impl Runtime {
         
         // 1. Transition to Processing state
         self.state_machine.transition(State::Processing)?;
-
+        
         // 2. Hardened Analysis Phase
         self.execute_system_call_analysis(ast_root)?;
-
+        
         // 3. Hardened Execution Phase
         self.execute_system_call_execution(ast_root)?;
-
+        
         // 4. Transition back to Idle state upon successful completion
         self.state_machine.transition(State::Idle)?;
-
+        
         Ok(())
     }
 
     /// Internal method to handle the analysis step via the hardened interface.
     fn execute_system_call_analysis(&mut self, ast_root: &SyntaxNode) -> Result<(), String> {
+        // Boundary Check: Ensure state is Processing before proceeding
+        if self.state_machine.current_state != State::Processing {
+            return Err(format!("Runtime Boundary Violation: Analysis called when state is {:?}. Immediate failure.", self.state_machine.current_state));
+        }
+
         // Hook: Mark AST root as initial source of potential taint
         self.taint_tracker.mark_source(ast_root);
-        // Check state before calling the system call abstraction
-        if self.state_machine.current_state != State::Processing { 
-            return Err(format!("System stability failure: Analysis called when state is {:?}", self.state_machine.current_state));
-        }
 
         // Delegate to the engine via the interface abstraction, passing the tracker for tracing
         self.engine.analyze_and_plan(ast_root).map_err(|e| {
@@ -113,15 +113,15 @@ impl Runtime {
 
     /// Internal method to handle the execution step via the hardened interface.
     fn execute_system_call_execution(&mut self, ast_root: &SyntaxNode) -> Result<(), String> {
+        // Boundary Check: Ensure state is Processing before proceeding
+        if self.state_machine.current_state != State::Processing {
+            return Err(format!("Runtime Boundary Violation: Execution called when state is {:?}. Immediate failure.", self.state_machine.current_state));
+        }
+
         // Hook: Propagate taint context during execution
         // We pass a context string to simulate deeper tracing hooks inside the engine
         self.taint_tracker.propagate(ast_root, "ExecutionStart");
         
-        // Check state before calling the system call abstraction
-        if self.state_machine.current_state != State::Processing { 
-            return Err(format!("System stability failure: Execution called when state is {:?}", self.state_machine.current_state));
-        }
-
         // Delegate to the engine via the interface abstraction, passing the tracker for tracing
         self.engine.execute(ast_root).map_err(|e| {
             // If execution fails, transition to Error state
