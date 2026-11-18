@@ -9,10 +9,11 @@ impl<'a> SemanticAnalyzer<'a> {
     }
 
     pub fn analyze(&self, tokens: Vec<String>) -> Result<(), String> {
-        // TODO: Implement the analyze method
-        Ok(())
+        for token in tokens {
+            // Implement the analysis logic here
+        }
+        Ok(()),
     }
 }
 
-use std::collections::{HashMap, HashSet};
 use std::collections::{HashMap, HashSet};
