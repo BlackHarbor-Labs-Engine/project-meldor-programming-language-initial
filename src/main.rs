@@ -18,6 +18,6 @@ fn main() {
 
     let mut builder = ir::IrBuilder::new();
     // In a real implementation, we'd use the actual syntax tree here
-    let ir_result = builder.from_syntax(vec![]);
+    let ir_result = builder.from_syntax(syntax_tree);
     println!("IR Result: {:?}", ir_result);
 }
