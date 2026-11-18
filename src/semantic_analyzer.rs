@@ -17,7 +17,7 @@ fn analyze_node(node: &SyntaxNode) -> Result<(), String> {
             if matches!(&left.kind, NodeType::UnknownNode) || matches!(&right.kind, NodeType::UnknownNode) {
                 return Err("Semantic Error: Binary operation involves an unknown node.".to_string());
             }
-            // Placeholder for actual binary op validation
+            if !left.get_type().map_or(false, |t| t.is_compatible_with(right.get_type().unwrap_or(&Type::Unknown))) { return Err(format!("Semantic Error: Type mismatch for binary op '{}'. Left type incompatible with right type.".to_string())); }
             Ok(())
         }
         NodeType::Declaration { name, ty } => {

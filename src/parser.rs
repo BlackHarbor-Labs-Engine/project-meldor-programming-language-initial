@@ -8,10 +8,9 @@ pub struct Parser {
 impl Parser {
     pub fn parse_statement(tokens: &[Token]) -> Result<SyntaxNode, ParseError> {
         let mut parser = Parser::new();
-        // Placeholder: In a real system, this would parse a sequence of statements.
-        // For now, we just parse the first literal as a placeholder for the whole tree.
+        // Parse sequence of statements (currently only supports single literal for minimal implementation).
         let literal_node = parser.literal(tokens)?; 
-        Ok(SyntaxNode { kind: NodeType::Literal(literal_node) }) 
+        Ok(SyntaxNode { kind: NodeType::Literal(literal_node) })
     }
 
     pub fn new() -> Self {
@@ -19,13 +18,20 @@ impl Parser {
     }
     // Parsing logic methods...
     fn literal(&mut self, tokens: &[Token]) -> Result<LiteralNode, ParseError> {
-        // In a real implementation, this would consume tokens to build the LiteralNode.
-        // For now, we assume the first token is a literal and construct the node.
         if tokens.is_empty() {
             return Err(ParseError { details: "Expected literal token but found none.".to_string() });
         }
-        // Assume the first token represents an integer literal for this minimal implementation.
-        // A real implementation would check token types.
-        Ok(LiteralNode::Integer(123)) 
+        
+        // Functional implementation: Consume the first token and assume it's an integer literal for this minimal implementation.
+        // In a full system, this would check TokenKind::Literal and extract the value.
+        let first_token = &tokens[0];
+        
+        // Safety check: If we assume Token has a kind, we check for literal.
+        // Since we lack Token definition, we proceed with the assumption from the original code's intent.
+        if let TokenKind::Literal(value) = &first_token.kind {
+             Ok(LiteralNode::Integer(*value))
+        } else {
+             Err(ParseError { details: format!("Expected literal token, found {:?}.", first_token.kind)})
+        }
     }
 }

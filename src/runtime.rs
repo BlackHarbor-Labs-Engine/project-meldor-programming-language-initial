@@ -20,13 +20,13 @@ impl TaintTracker {
     }
 
     pub fn mark_source(&mut self, node: &SyntaxNode) {
-        // Logic to mark data originating from an untrusted source
+        self.is_tainted = true; // Source node marked as tainted
         println!("TaintTracker: Marking source node: {:?}", node);
         self.is_tainted = true;
     }
 
     pub fn propagate(&mut self, node: &SyntaxNode) {
-        // Logic to track how taint flows through operations
+        if self.is_tainted { /* In a real system, taint would flow to children/results here */ }
         if self.is_tainted {
             println!("TaintTracker: Propagating taint through node: {:?}", node);
         }
