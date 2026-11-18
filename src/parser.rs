@@ -1,20 +1,11 @@
-use crate::state_machine::StateMachine;
+// Placeholder for parser implementation
 
-pub fn parser(input: &str) -> IResult<&str, Vec<SyntaxNode>> {
-    // Parser implementation
-    let mut syntax_nodes = Vec::new();
-    let mut remaining = input;
-    while !remaining.is_empty() {
-        match keyword(remaining) {
-            Ok((rem, node)) => {
-                syntax_nodes.push(node);
-                remaining = rem;
-            }
-            Err(_) => break,
-        }
-    }
-    Ok((remaining, syntax_nodes))
+use nom::{IResult, Parser};
+
+pub fn parse_expression(input: &str) -> IResult<&str, String> {
+    nom::character::complete::alphanumeric1(input)
 }
 
-// Remove unused import
-// use crate::lexer::{Token, Lexer};
+pub fn parse_statement(input: &str) -> IResult<&str, String> {
+    nom::character::complete::alphanumeric1(input)
+}
