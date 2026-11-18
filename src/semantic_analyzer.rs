@@ -6,6 +6,9 @@ pub struct Scope<'a, 'b> {
 }
 
 pub struct SemanticAnalyzer<'a> {
+    // Add fields here if needed
+    // For now, let's keep it empty
+}
     // Define fields here
 }
     scopes: Vec<Scope<'a, 'a>>,
