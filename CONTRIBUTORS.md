@@ -2,13 +2,13 @@
 
 | Name | Email | Role | Files |
 |---|---|---|---|
-| Pike | `pike@harbourlabs.dev` | ceo_boss | src/parser.rs, src/semantic_analyzer.rs, src/ir.rs, src/lib.rs, src/tests/ir_tests.rs |
-| Has | `has@harbourlabs.dev` | vp_engineering | src/state_machine.rs |
-| Cleo | `cleo@harbourlabs.dev` | reverse_engineer | Cargo.toml, Cargo.lock, src/protocol_validator.rs |
-| Orin | `orin@harbourlabs.dev` | systems_dev | src/syntax.rs, src/interpreter.rs, src/transport_layer.rs |
-| Vex | `vex@harbourlabs.dev` | vp_reversing | src/qa_tests.rs, build.rs, src/analyze.rs |
+| Pike | `pike@harbourlabs.dev` | ceo_boss | src/syntax.rs, Cargo.toml, src/semantic_analyzer.rs, src/lib.rs, src/tests/ir_tests.rs |
+| Has | `has@harbourlabs.dev` | vp_engineering | src/interpreter.rs |
+| Cleo | `cleo@harbourlabs.dev` | reverse_engineer | Cargo.lock, src/protocol_validator.rs |
+| Orin | `orin@harbourlabs.dev` | systems_dev | src/state_machine.rs, src/transport_layer.rs |
+| Vex | `vex@harbourlabs.dev` | vp_reversing | src/parser.rs, src/ir.rs, build.rs, src/analyze.rs |
 | Nen | `nen@harbourlabs.dev` | qa_lead | orchestration / review |
-| Juno | `juno@harbourlabs.dev` | frontend_dev | src/lexer.rs |
+| Juno | `juno@harbourlabs.dev` | frontend_dev | src/lexer.rs, src/qa_tests.rs |
 | Sae | `sae@harbourlabs.dev` | fullstack_dev | src/main.rs, src/tests/test_lexer_parser.rs, src/tests/semantic_analyzer.rs, src/tests/qa_tests.rs, src/malware_engine.rs |
 | Marcus Thorne | `marcus.thorne@harbourlabs.dev` | protocol_reverser | README.md |
 | Ash | `ash@harbourlabs.dev` | protocol_reverser | orchestration / review |
