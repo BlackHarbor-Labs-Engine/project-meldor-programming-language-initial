@@ -1,3 +1,9 @@
 use crate::syntax::{Type, SyntaxNode};
 
-// Implement the semantic analyzer here
+// Implement basic semantic analysis logic
+pub fn analyze(node: &SyntaxNode) -> Result<(), String> {
+    // Placeholder analysis logic
+    Ok(())
+}
+
+// ... rest of the semantic analysis logic ...
