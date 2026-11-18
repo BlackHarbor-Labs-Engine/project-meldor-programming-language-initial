@@ -50,4 +50,30 @@ impl<'a> SemanticAnalyzer<'a> {
     pub fn get_nodes(&self, key: &str) -> Option<&Vec<String>> {
         self.nodes.get(key)
     }
+
+    pub fn analyze(&mut self, nodes: Vec<SyntaxNode>) -> Result<(), String> {
+        // Basic semantic analysis: validate syntax nodes and build scope
+        for node in nodes.iter() {
+            match node {
+                SyntaxNode::Keyword(kw) => {
+                    // Validate known keywords
+                    match kw.as_str() {
+                        "let" | "fn" | "if" | "else" | "while" | "for" | "return" => {}
+                        _ => return Err(format!("Unknown keyword: {}", kw)),
+                    }
+                }
+                SyntaxNode::Identifier(id) => {
+                    // Track identifiers in the current scope
+                    self.add_variable(id, id.clone());
+                }
+                SyntaxNode::Literal { value, .. } => {
+                    // Validate literal values (basic check)
+                    if value.parse::<i64>().is_err() && value.parse::<f64>().is_err() {
+                        return Err(format!("Invalid literal value: {}", value));
+                    }
+                }
+            }
+        }
+        Ok(())
+    }
 }
