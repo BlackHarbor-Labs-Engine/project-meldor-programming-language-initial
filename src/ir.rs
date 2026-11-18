@@ -32,6 +32,31 @@ impl IrBuilder {
     pub fn get_log(&self) -> &Vec<String> {
         &self.execution_log
     }
+
+    /// Attempts to process an instruction, validating against known exploit patterns.
+    /// Returns true if processing was safe, false if an edge case/exploit vector was triggered.
+    pub fn process_instruction(&mut self, instruction: &IrInstruction) -> bool {
+        self.log_event(&format!("Processing instruction: {}", instruction.op));
+
+        // --- Exploit Injection Vector Validation Logic ---
+        // Edge Case 1: Check for specific instrumentation tags that signal potential injection points.
+        if let Some(tag) = &instruction.instrumentation_tag {
+            if tag.contains("INJECT_SHELL") || tag.contains("OVERFLOW") {
+                self.log_event(&format!("!!! CRITICAL: Detected potential exploit vector via tag: {}", tag));
+                return false; // Trigger validation failure
+            }
+        }
+
+        // Edge Case 2: Check for unusual operand combinations (e.g., too many or specific types).
+        if instruction.operands.len() > 5 {
+            self.log_event(&format!("WARNING: Instruction {} has excessive operands: {}", instruction.op, instruction.operands.len()));
+            // For this validation, excessive operands are treated as a warning, not a failure, unless they hit a hard limit.
+        }
+
+        // Simulate successful execution path
+        self.log_event(&format!("Successfully executed instruction: {}", instruction.op));
+        true
+    }
 }
 
 // Define the top-level IR structure to satisfy pub use ir::IR;
