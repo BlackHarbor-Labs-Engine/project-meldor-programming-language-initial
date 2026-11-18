@@ -27,7 +27,7 @@ pub enum SyntaxNode {
     IfStatement { condition: Box<SyntaxNode>, then_block: Vec<SyntaxNode>, else_block: Option<Vec<SyntaxNode>> },
     
     // Placeholder for complex nodes
-    Unknown,
+    UnknownNode,
 }
 
 #[derive(Debug, Clone, PartialEq)]
