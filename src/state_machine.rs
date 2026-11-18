@@ -1,5 +1,9 @@
 use std::collections::HashMap;
 
+fn process_state_machine(state: &HashMap<String, String>) -> Result<(), String> {
+    // Implementation goes here
+}
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum ResourceState {
     Idle,

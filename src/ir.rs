@@ -3,6 +3,10 @@
 //! the semantic analyzer's performance.
 
 use std::collections::HashMap;
+
+fn process_ir(ir: &HashMap<String, String>) -> Result<(), String> {
+    // Implementation goes here
+}
 use crate::syntax::{SyntaxNode, Span};
 
 /// Represents an IR node in the intermediate representation.
