@@ -26,13 +26,13 @@ impl SemanticAnalyzer {
                     self.types.insert(name, ty);
                 }
                 NodeType::Assignment { name, value_node } => {
-                    let expected_type = self.types.get(&name).cloned().unwrap_or(Type::Unknown);
+                    let expected_type = self.types.get(name.as_str()).cloned().unwrap_or(Type::Unknown);
                     
                     // Determine actual type based on the value node's kind
                     let actual_type = match &value_node.kind {
                         NodeType::Literal(Literal { value: Value::String(_) }) => Type::String,
                         NodeType::Literal(Literal { value: Value::Int(_) }) => Type::Int,
-                        NodeType::Identifier(id) => self.types.get(&id).cloned().unwrap_or(Type::Unknown),
+                        NodeType::Identifier(id) => self.types.get(id.as_str()).cloned().unwrap_or(Type::Unknown),
                         _ => Type::Unknown,
                     };
 
@@ -40,7 +40,7 @@ impl SemanticAnalyzer {
                         return Err(format!("Semantic Error: Type mismatch for '{}'. Expected {:?}, found {:?}.", name, expected_type, actual_type));
                     }
                 }
-                NodeType::BinaryOp { left, op, right } => {
+                NodeType::BinaryOp { left, right, .. } => {
                     // In a real system, we'd recursively check types here.
                     // For now, we just ensure operands are not unknown.
                     if matches!(&left.kind, NodeType::UnknownNode) || matches!(&right.kind, NodeType::UnknownNode) {

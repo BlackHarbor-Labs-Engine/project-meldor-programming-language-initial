@@ -1,5 +1,5 @@
 use crate::lexer::Token;
-use crate::syntax::{LiteralNode, ParseError};
+use crate::syntax::{Literal, SyntaxNode};
 
 pub struct Parser {
     // Parser state fields go here
