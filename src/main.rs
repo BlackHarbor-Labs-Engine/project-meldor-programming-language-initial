@@ -7,7 +7,7 @@ fn main() {
     println!("Tokens: {:?}", tokens);
 
     // Parse the tokens into a syntax tree
-    let syntax_tree = parser::parse_statement(input).unwrap().1;
+    let syntax_tree = parser::parse_statement(input).unwrap();
     println!("Syntax Tree: {:?}", syntax_tree);
 
     let mut analyzer = semantic_analyzer::SemanticAnalyzer::new();

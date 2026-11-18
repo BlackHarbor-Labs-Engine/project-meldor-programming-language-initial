@@ -1,4 +1,4 @@
-// Analyzer trait for dynamic analysis
+<file path="src/analyze.rs">
 
 pub trait Analyzer {
     fn analyze(&self, token: &str) -> Result<(), String>;
@@ -16,3 +16,4 @@ impl Analyzer for SemanticAnalyzer {
         Ok(())
     }
 }
+</file>
