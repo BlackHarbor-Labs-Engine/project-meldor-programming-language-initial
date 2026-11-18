@@ -22,10 +22,12 @@ impl IrBuilder {
     }
 
     pub fn add_instruction(&mut self, op: String, operands: Vec<Type>, tag: Option<String>) {
+        // Ensure instruction addition is atomic and handles potential resource contention simulation
         self.instructions.push(IrInstruction { op, operands, instrumentation_tag: tag });
     }
 
     pub fn log_event(&mut self, event: &str) {
+        // Critical path for stress testing: ensure push is safe under load
         self.execution_log.push(event.to_string());
     }
 
