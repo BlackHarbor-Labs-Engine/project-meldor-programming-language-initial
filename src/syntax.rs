@@ -38,7 +38,7 @@ pub enum Literal {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub enum Operator {
+#[derive(Debug, Clone, Copy)] pub enum Operator {
     Add,
     Subtract,
     Multiply,

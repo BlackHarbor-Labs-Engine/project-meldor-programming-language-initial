@@ -69,7 +69,7 @@ mod tests {
         analyzer.types.insert("x".to_string(), Type::Int);
         let nodes = vec![SyntaxNode::Assignment {
             name: "x".to_string(),
-            value_node: SyntaxNode::Literal(Literal::String("hello".to_string()))
+            value_node: Box::new(SyntaxNode::Literal(Literal::String("hello".to_string())))
         }];
         let result = analyzer.analyze_syntax_nodes(nodes);
         assert!(result.is_err());
