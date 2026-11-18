@@ -15,4 +15,4 @@ impl<'a> SemanticAnalyzer<'a> {
 }
 
 use std::collections::{HashMap, HashSet};
-use std::thread::Scope;
+use std::collections::{HashMap, HashSet};
