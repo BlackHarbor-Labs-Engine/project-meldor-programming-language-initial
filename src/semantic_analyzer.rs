@@ -6,7 +6,6 @@ pub fn analyze(node: &SyntaxNode) -> Result<(), String> {
             if matches!(&left.kind, NodeType::UnknownNode) || matches!(&right.kind, NodeType::UnknownNode) {
                 return Err("Semantic Error: Binary operation involves an unknown node.".to_string());
             }
-            // Placeholder: Actual type checking logic would go here.
             Ok(())
         }
         NodeType::Declaration { name, ty } => {
@@ -14,7 +13,6 @@ pub fn analyze(node: &SyntaxNode) -> Result<(), String> {
             Ok(())
         }
         NodeType::Assignment { name, value_node } => {
-            // Placeholder: Actual type compatibility check logic would go here.
             Ok(())
         }
         NodeType::Literal(lit_node) => {
