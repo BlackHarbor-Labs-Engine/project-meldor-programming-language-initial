@@ -3,5 +3,7 @@
 // Implement the parser here
 
 pub fn parse(input: &str) -> Result<SyntaxNode, String> {
-    Err("Parser not implemented".to_string())
+    let tokens = lexer::lex(input);
+    let mut parser = Parser::new(tokens);
+    parser.parse_program()
 }

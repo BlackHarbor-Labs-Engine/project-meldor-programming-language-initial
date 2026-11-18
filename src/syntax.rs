@@ -1,42 +1,62 @@
 // src/syntax.rs
-//! Defines the core Abstract Syntax Tree (AST) nodes and structural elements for Meldor.
+//! Defines the Abstract Syntax Tree (AST) structure for Meldor.
 
-use std::fmt;
+use std::fmt::Debug;
 
-/// Represents the positional span of a token/node in the source code.
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Span {
-    pub start: usize,
-    pub end: usize,
-    pub line: usize,
-    pub column: usize,
-}
-
-impl Span {
-    pub fn new(start: usize, end: usize, line: usize, column: usize) -> Self {
-        Span { start, end, line, column }
-    }
-}
-
-/// Enumeration of all possible types in Meldor.
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Type {
     Int,
-    String,
     Bool,
+    String,
+    Custom(String),
+}
+
+// --- Core AST Node Definition ---
+#[derive(Debug, Clone, PartialEq)]
+pub enum SyntaxNode {
+    // Basic types
+    Literal(Literal),
+    Identifier(String),
+    
+    // Structure nodes
+    Declaration { name: String, ty: Type },
+    Assignment { name: String, value_node: Box<SyntaxNode> },
+    BinaryOp { left: Box<SyntaxNode>, op: Operator, right: Box<SyntaxNode> },
+    
+    // Control flow (simplified)
+    IfStatement { condition: Box<SyntaxNode>, then_block: Vec<SyntaxNode>, else_block: Option<Vec<SyntaxNode>> },
+    
+    // Placeholder for complex nodes
     Unknown,
 }
 
-/// The core structure representing a node in the Abstract Syntax Tree.
-#[derive(Debug, Clone)]
-pub enum SyntaxNode {
-    // Lexical Tokens
-    Keyword(String),
-    Identifier(String),
-    Literal { value: String, span: Span },
+#[derive(Debug, Clone, PartialEq)]
+pub enum Literal {
+    Integer(i32),
+    Boolean(bool),
+    String(String),
+}
 
-    // AST Structure
-    Declaration { name: String, ty: Type },
-    Assignment { name: String, value_node: Box<SyntaxNode> },
-    // ... other nodes like BinaryOp, FunctionCall, etc. would go here
+#[derive(Debug, Clone, PartialEq)]
+pub enum Operator {
+    Add,
+    Subtract,
+    Multiply,
+    Divide,
+    Equal,
+    NotEqual,
+}
+
+// --- Trait Definition for Analysis ---
+// This trait must be available to SemanticAnalyzer in analyze.rs
+pub trait Analyzer {
+    fn analyze(&self, node: &SyntaxNode) -> Result<(), String>;
+}
+
+// Default implementation for nodes that don't require deep analysis
+impl Analyzer for SyntaxNode {
+    fn analyze(&self, node: &SyntaxNode) -> Result<(), String> {
+        // Default implementation does nothing, allowing specific nodes to override
+        Ok(())
+    }
 }
