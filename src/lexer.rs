@@ -32,7 +32,7 @@ impl Lexer {
         }
     }
 
-    pub fn next_token(&mut self) -> Token {
+    pub fn tokenize(&mut self) -> Vec<Token> {
         let mut token = Token::new();
         match self.ch {
             Some(ch) => {
