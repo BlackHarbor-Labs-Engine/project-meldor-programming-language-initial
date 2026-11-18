@@ -1,4 +1,4 @@
-use crate::syntax::{NodeType};
+use crate::syntax::{NodeType, LiteralNode};
 
 use crate::syntax::SyntaxNode;
 
