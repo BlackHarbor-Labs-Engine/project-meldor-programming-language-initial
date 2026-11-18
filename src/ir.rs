@@ -1,4 +1,4 @@
-use crate::syntax::{Type, SyntaxNode}; // Assuming SyntaxNode is defined elsewhere
+use crate::syntax::{Type, SyntaxNode}; // Keep this for now, assuming SyntaxNode is defined elsewhere
 
 // Define IrInstruction
 pub struct IrInstruction {
@@ -34,4 +34,13 @@ impl IrBuilder {
     }
 }
 
-// Placeholder for other IR logic that was truncated
+// Define the top-level IR structure to satisfy pub use ir::IR;
+pub struct IR {
+    pub builder: IrBuilder,
+}
+
+impl IR {
+    pub fn new() -> Self {
+        IR { builder: IrBuilder::new() }
+    }
+}

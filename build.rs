@@ -1,6 +1,6 @@
-// Build script for Meldor language compiler
-
 fn main() {
-    // Removed external link search path
-    // Removed external library link
+    // Placeholder logic: If we need specific dependencies or build scripts,
+    // they would go here. For a standard Rust project, this can be empty.
+    println!("cargo:rerun-if-changed=src/lib.rs");
+    println!("cargo:rerun-if-changed=src/syntax.rs");
 }
