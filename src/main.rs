@@ -19,7 +19,7 @@ fn main() {
         },
     ];
     
-    match analyzer.analyze(nodes) {
+    match analyzer.analyze(&nodes) {
         Ok(_) => println!("Semantic analysis passed successfully."),
         Err(e) => eprintln!("Semantic analysis failed: {}", e),
     }
