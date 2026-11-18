@@ -1,19 +1,12 @@
 // src/lib.rs
+//! The main library crate for Meldor.
 
-use std::collections::HashMap;
-
+pub mod syntax;
 pub mod lexer;
 pub mod parser;
-pub mod semantic_analyzer;
-pub mod ir;
-pub mod state_machine;
 pub mod analyze;
-pub mod syntax;
-pub mod malware_engine;
+pub mod ir;
+pub mod interpreter;
 
-pub fn process_ir(ir: &HashMap<String, String>) -> Result<(), String> {
-    // Function implementation goes here
-    Ok(())
-}
-
-// Other code...
+// Re-exporting core types for easy access
+pub use syntax::{SyntaxNode, Type, Analyzer};
