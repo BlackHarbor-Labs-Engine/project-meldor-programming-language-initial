@@ -28,7 +28,7 @@ impl Parser {
         
         // Safety check: If we assume Token has a kind, we check for literal.
         // Since we lack Token definition, we proceed with the assumption from the original code's intent.
-        if let TokenKind::Literal(value) = &first_token { // Assuming Token itself holds the kind or is the kind structure}
+        if let Token::Literal(value) = first_token { // Assuming Token::Literal holds the i64 value}
              Ok(LiteralNode::Integer(*value))
         } else {
              Err(ParseError { details: format!("Expected literal token, found {:?}.", first_token)})
