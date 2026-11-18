@@ -38,7 +38,7 @@ pub enum Literal {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-#[derive(Debug, Clone, Copy)] pub enum Operator {
+#[derive(Debug, Clone, Copy, std::fmt::Display)] pub enum Operator {
     Add,
     Subtract,
     Multiply,
@@ -55,7 +55,7 @@ pub trait Analyzer {
 
 // Default implementation for nodes that don't require deep analysis
 impl Analyzer for SyntaxNode {
-    fn analyze(&self, node: &SyntaxNode) -> Result<(), String> {
+    fn analyze(&self, _node: &SyntaxNode) -> Result<(), String> {
         // Default implementation does nothing, allowing specific nodes to override
         Ok(())
     }

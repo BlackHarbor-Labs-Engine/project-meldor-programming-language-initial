@@ -1,7 +1,7 @@
 // src/lexer.rs
 //! The lexer for the Meldor language.
 
-use std::collections::HashMap;
+
 
 pub struct Lexer {
     input: String,
