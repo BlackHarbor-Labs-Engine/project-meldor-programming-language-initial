@@ -1,20 +1,23 @@
-use crate::syntax::{NodeType, LiteralNode;
+use crate::syntax::{NodeType, LiteralNode, SyntaxNode};
 
-use crate::syntax::{NodeType, LiteralNode};
-
+/// Analyzes a slice of SyntaxNodes for semantic correctness.
 pub fn analyze_syntax_nodes(nodes: &[SyntaxNode]) -> Result<(), String> {
     for node in nodes {
-        if let Err(e) = analyze(node) {
+        if let Err(e) = analyze_node(node) {
             return Err(e);
         }
     }
     Ok(())
 }
+
+/// Helper function to analyze a single node.
+fn analyze_node(node: &SyntaxNode) -> Result<(), String> {
     match &node.kind {
         NodeType::BinaryOp { left, right, op } => {
             if matches!(&left.kind, NodeType::UnknownNode) || matches!(&right.kind, NodeType::UnknownNode) {
                 return Err("Semantic Error: Binary operation involves an unknown node.".to_string());
             }
+            // Placeholder for actual binary op validation
             Ok(())
         }
         NodeType::Declaration { name, ty } => {
