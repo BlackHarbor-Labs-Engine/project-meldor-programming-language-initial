@@ -1,21 +1,19 @@
-use std::collections::HashMap;
-
-pub struct Scope<'a, 'b> {
-    name: &'a str,
-    variables: HashMap<&'b str, String>,
-}
-
 pub struct SemanticAnalyzer<'a> {
-    scopes: Vec<Scope<'a, 'a>>,
-    nodes: HashMap<String, Vec<String>>,
+    scopes: Vec<Scope<'a, 'a>>, // Define fields here
+    nodes: HashMap<String, Vec<String>>, // Define fields here
 }
 
 impl<'a> SemanticAnalyzer<'a> {
-    pub fn new() -> Self {
+    pub fn new() -> SemanticAnalyzer<'a> {
         SemanticAnalyzer {
             scopes: Vec::new(),
             nodes: HashMap::new(),
         }
+    }
+
+    pub fn analyze(&self, tokens: &[&str]) -> Result<(), String> {
+        // Implement analyze method here
+        Ok(())
     }
 
     pub fn push_scope(&mut self, name: &'a str) {
