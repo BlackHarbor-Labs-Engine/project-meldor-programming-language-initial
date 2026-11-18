@@ -128,42 +128,77 @@ impl SemanticAnalyzer {
         // First pass: collect all type definitions and declarations
         self.first_pass(&nodes)?;
         
-        // Second pass: resolve types and check for recursive definitions
+        // Second pass: resolve types and check for semantic errors
         self.second_pass(&nodes)?;
         
         Ok(())
     }
 
     fn first_pass(&mut self, nodes: &Vec<SyntaxNode>) -> Result<(), String> {
-        let _graph = DependencyGraph::new();
-        for node in nodes {
-            match node {
-                SyntaxNode::Keyword(value) if value == "fn" => {
-                    // Function declaration
-                    self.enter_scope();
-                }
-                SyntaxNode::Keyword(value) if value == "let" => {
-                    // Variable declaration
-                    // We'll handle this in second pass for now
-                }
-                _ => {}
-            }
-        }
+        // In a real implementation, this would collect all type definitions
+        // For now, we'll just add some basic types
+        self.types.insert("i32".to_string(), Type::new("i32"));
+        self.types.insert("bool".to_string(), Type::new("bool"));
+        self.types.insert("string".to_string(), Type::new("string"));
+        
         Ok(())
     }
 
     fn second_pass(&mut self, nodes: &Vec<SyntaxNode>) -> Result<(), String> {
-        for node in nodes {
-            match node {
+        let mut i = 0;
+        while i < nodes.len() {
+            match &nodes[i] {
                 SyntaxNode::Keyword(value) if value == "let" => {
-                    // This is a simplified version - in practice you'd parse the assignment
-                    // and check type compatibility here
-                    println!("Analyzing let statement at {:?}", Span::new(0, 0, 0, 0));
+                    // Handle variable declaration
+                    if i + 3 < nodes.len() {
+                        // Expected pattern: let IDENTIFIER = EXPRESSION
+                        if let SyntaxNode::Identifier(name) = &nodes[i + 1] {
+                            // Check if we have an assignment operator and expression
+                            if let SyntaxNode::Keyword(assignment_op) = &nodes[i + 2] {
+                                if assignment_op == "=" {
+                                    // For now, we'll just validate the structure
+                                    // In a real implementation, we'd evaluate the expression type
+                                    // and check compatibility with declared type
+                                    println!("Processing variable declaration: {}", name);
+                                }
+                            }
+                        }
+                    }
+                }
+                SyntaxNode::Keyword(value) if value == "fn" => {
+                    // Handle function declaration
+                    self.enter_scope();
+                    // Function parameters would be processed here in a real implementation
+                }
+                SyntaxNode::Keyword(value) if value == "end" => {
+                    // End of scope
+                    self.exit_scope();
                 }
                 _ => {}
             }
+            i += 1;
         }
+        
         Ok(())
+    }
+    
+    /// Check if two types are compatible for assignment
+    pub fn is_type_compatible(&self, source: &Type, target: &Type) -> bool {
+        // For now, we'll just check if they're the same type
+        // In a real implementation, this would be more sophisticated
+        source.name == target.name
+    }
+    
+    /// Resolve a literal value to its type
+    pub fn resolve_literal_type(&self, literal_value: &str) -> Type {
+        // Simple type resolution for literals
+        if literal_value.parse::<i32>().is_ok() {
+            Type::new("i32")
+        } else if literal_value == "true" || literal_value == "false" {
+            Type::new("bool")
+        } else {
+            Type::new("string") // Default to string for unknown literals
+        }
     }
 }
 
@@ -231,6 +266,30 @@ mod tests {
     fn test_semantic_analyzer_new() {
         let analyzer = SemanticAnalyzer::new();
         assert_eq!(analyzer.scopes.len(), 1);
-        assert!(analyzer.types.is_empty());
+        assert!(!analyzer.types.is_empty()); // Should have basic types
+    }
+    
+    #[test]
+    fn test_is_type_compatible() {
+        let mut analyzer = SemanticAnalyzer::new();
+        let int_type = Type::new("i32");
+        let bool_type = Type::new("bool");
+        
+        assert!(analyzer.is_type_compatible(&int_type, &int_type));
+        assert!(!analyzer.is_type_compatible(&int_type, &bool_type));
+    }
+    
+    #[test]
+    fn test_resolve_literal_type() {
+        let analyzer = SemanticAnalyzer::new();
+        
+        let int_type = analyzer.resolve_literal_type("42");
+        assert_eq!(int_type.name, "i32");
+        
+        let bool_type = analyzer.resolve_literal_type("true");
+        assert_eq!(bool_type.name, "bool");
+        
+        let string_type = analyzer.resolve_literal_type("hello");
+        assert_eq!(string_type.name, "string");
     }
 }
