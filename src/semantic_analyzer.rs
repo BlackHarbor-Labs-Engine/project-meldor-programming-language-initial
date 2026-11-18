@@ -6,11 +6,23 @@ pub struct Scope<'a, 'b> {
 }
 
 pub struct SemanticAnalyzer<'a> {
+    // Define fields here
+}
     scopes: Vec<Scope<'a, 'a>>,
     nodes: HashMap<String, Vec<String>>,
 }
 
 impl<'a> SemanticAnalyzer<'a> {
+    pub fn new() -> SemanticAnalyzer<'a> {
+        // Initialize fields here
+        SemanticAnalyzer { /* fields */ }
+    }
+
+    pub fn analyze(&self, tokens: &[&str]) -> Result<(), String> {
+        // Implement analyze method here
+        Ok(())
+    }
+}
     pub fn new() -> Self {
         SemanticAnalyzer {
             scopes: Vec::new(),

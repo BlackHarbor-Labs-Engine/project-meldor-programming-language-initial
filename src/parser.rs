@@ -14,13 +14,14 @@ pub fn parse_expression(input: &str) -> IResult<&str, String> {
         // Parse a literal number
         digit1,
     ))(input)?;
-    
+
     Ok((remaining, expr.to_string()))
 }
 
 pub fn parse_statement(input: &str) -> IResult<&str, String> {
+    let analyzer = SemanticAnalyzer;
     let (remaining, _) = space0(input)?;
-    
+
     // Parse a simple statement like "let x = 5" or "print(123)"
     let (remaining, stmt) = alt((
         // Parse assignment statements like "let x = 5"
@@ -48,7 +49,12 @@ pub fn parse_statement(input: &str) -> IResult<&str, String> {
             )),
         ),
     ))(remaining)?;
-    
+
+    // Call the analyzer on each token
+    for token in stmt.0.split_whitespace() {
+        analyzer.analyze(token)?;
+    }
+
     // Return the parsed statement as a string
     Ok((remaining, stmt.0.to_string()))
 }
@@ -68,7 +74,7 @@ mod tests {
         // Test assignment statement
         let result = parse_statement("let x = 5");
         assert!(result.is_ok());
-        
+
         // Test function call
         let result = parse_statement("print(123)");
         assert!(result.is_ok());
