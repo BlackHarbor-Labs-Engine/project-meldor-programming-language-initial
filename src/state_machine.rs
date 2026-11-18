@@ -1,4 +1,4 @@
-pub enum State {
+#[derive(Debug, PartialEq)] pub enum State {
     Idle,
     Processing,
     Error,
