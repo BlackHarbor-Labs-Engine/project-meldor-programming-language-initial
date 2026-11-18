@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
-fn process_state_machine(state: &HashMap<String, String>) -> Result<(), String> {
+// Renamed state to _state to satisfy unused variable warning
+fn process_state_machine(_state: &HashMap<String, String>) -> Result<(), String> {
     // Implementation goes here
     Ok(())
 }
@@ -50,48 +51,39 @@ impl ResourceManager {
         id
     }
 
+    // Hardened acquire: returns immediately on invalid state
     pub fn acquire(&mut self, id: u32) -> Result<(), String> {
-        match self.resources.get_mut(&id) {
-            Some(resource) => {
-                if resource.state == ResourceState::Idle {
-                    resource.state = ResourceState::InUse;
-                    Ok(())
-                } else {
-                    Err(format!("Resource {} is not idle", id))
-                }
-            } else {
-                Err(format!("Resource {} does not exist", id)),
-            }
+        let resource = self.resources.get_mut(&id).ok_or_else(|| format!("Resource {} does not exist", id))?;
+        
+        if resource.state == ResourceState::Idle {
+            resource.state = ResourceState::InUse;
+            Ok(())
+        } else {
+            Err(format!("Resource {} is not idle, current state: {:?}", id, resource.state))
         }
     }
 
+    // Hardened release: returns immediately on invalid state
     pub fn release(&mut self, id: u32) -> Result<(), String> {
-        match self.resources.get_mut(&id) {
-            Some(resource) => {
-                if resource.state == ResourceState::InUse {
-                    resource.state = ResourceState::Released;
-                    Ok(())
-                } else {
-                    Err(format!("Resource {} is not in use", id))
-                }
-            } else {
-                Err(format!("Resource {} does not exist", id)),
-            }
+        let resource = self.resources.get_mut(&id).ok_or_else(|| format!("Resource {} does not exist", id))?;
+        
+        if resource.state == ResourceState::InUse {
+            resource.state = ResourceState::Released;
+            Ok(())
+        } else {
+            Err(format!("Resource {} is not in use, current state: {:?}", id, resource.state))
         }
     }
 
+    // Deallocate is safe if state is Released, otherwise it's an error.
     pub fn deallocate(&mut self, id: u32) -> Result<(), String> {
-        match self.resources.get_mut(&id) {
-            Some(resource) => {
-                if resource.state == ResourceState::Released {
-                    self.resources.remove(&id);
-                    Ok(())
-                } else {
-                    Err(format!("Resource {} is not released", id))
-                }
-            } else {
-                Err(format!("Resource {} does not exist", id)),
-            }
+        let resource = self.resources.get_mut(&id).ok_or_else(|| format!("Resource {} does not exist", id))?;
+        
+        if resource.state == ResourceState::Released {
+            self.resources.remove(&id);
+            Ok(())
+        } else {
+            Err(format!("Resource {} is not released, current state: {:?}", id, resource.state))
         }
     }
 
@@ -100,12 +92,8 @@ impl ResourceManager {
     }
 
     pub fn set_data(&mut self, id: u32, data: String) -> Result<(), String> {
-        match self.resources.get_mut(&id) {
-            Some(resource) => {
-                resource.data = Some(data);
-                Ok(())
-            }
-            None => Err(format!("Resource {} does not exist", id)),
-        }
+        let resource = self.resources.get_mut(&id).ok_or_else(|| format!("Resource {} does not exist", id))?;
+        resource.data = Some(data);
+        Ok(())
     }
 }

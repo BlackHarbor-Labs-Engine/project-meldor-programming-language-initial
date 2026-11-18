@@ -4,7 +4,7 @@
 use std::collections::HashMap;
 
 // Re-exporting Type from syntax.rs for IR usage
-pub use crate::syntax::Type;
+pub use crate::syntax::{Type, SyntaxNode};
 
 /// Represents a simplified Intermediate Representation instruction or structure.
 #[derive(Debug, Clone)]
