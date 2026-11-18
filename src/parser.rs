@@ -10,7 +10,7 @@ impl Parser {
         let mut parser = Parser::new();
         // Placeholder: In a real system, this would parse a sequence of statements.
         // For now, we just parse the first literal as a placeholder for the whole tree.
-        let literal_node = parser.literal(tokens)? // Placeholder logic replaced with functional call; 
+        let literal_node = parser.literal(tokens)?; 
         Ok(SyntaxNode { kind: NodeType::Literal(literal_node) }) 
     }
 
