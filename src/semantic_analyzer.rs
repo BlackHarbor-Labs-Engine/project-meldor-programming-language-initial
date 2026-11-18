@@ -13,7 +13,7 @@ impl SemanticAnalyzer {
     /// Returns the resulting Type if successful, or an error string.
     pub fn analyze_syntax_nodes(&self, node: &SyntaxNode) -> Result<Type, String> {
         match &node.kind {
-            NodeType::Literal(lit_node) => {
+            NodeType::Literal(_lit_node) => {
                 // Assuming LiteralNode has a method to determine its type
                 // Since we fixed syntax.rs, we can safely assume numeric literals resolve to Integer.
                 Ok(Type::Integer)
@@ -62,7 +62,7 @@ impl SemanticAnalyzer {
                         // Using a placeholder type for Boolean if Type::Boolean is missing
                         Ok(Type::Unknown) 
                     },
-                    _ => {
+                    Op::Unsupported => { return Err(format!("Semantic Error: Unsupported binary operation {:?}.", op)); }
                         // Default handling for other ops
                         Ok(Type::Unknown)
                     }
