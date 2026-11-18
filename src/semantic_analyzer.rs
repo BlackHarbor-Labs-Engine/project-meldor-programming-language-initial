@@ -135,15 +135,7 @@ impl SemanticAnalyzer {
                 SyntaxNode::Keyword { value, span } if value == "let" => {
                     // This is a simplified version - in practice you'd parse the assignment
                     // and check type compatibility here
-                    if let Some(ty) = self.types.get(&name) {
-                if ty != &Type::Unknown {
-                    println!("Analyzing let statement at {:?} with type: {:?}", span, ty);
-                } else {
-                    return Err(format!("Type not defined for variable at {:?}", span));
-                }
-            } else {
-                return Err(format!("Variable not declared at {:?}", span));
-            }
+                    println!("Analyzing let statement at {:?}", span);
                 }
                 _ => {}
             }
@@ -171,34 +163,5 @@ impl SemanticAnalyzer {
         fn get_nodes(&self) -> &HashMap<String, Vec<String>> {
             &self.nodes
         }
-    }
-        for node in nodes {
-            match node {
-                SyntaxNode::Keyword { value, .. } if value == "fn" => {
-                    // Function declaration
-                    self.enter_scope();
-                }
-                SyntaxNode::Keyword { value, .. } if value == "let" => {
-                    // Variable declaration
-                    // We'll handle this in second pass for now
-                }
-                _ => {}
-            }
-        }
-        Ok(())
-    }
-
-    fn second_pass(&mut self, nodes: &Vec<SyntaxNode>) -> Result<(), String> {
-        for node in nodes {
-            match node {
-                SyntaxNode::Keyword { value, span } if value == "let" => {
-                    // This is a simplified version - in practice you'd parse the assignment
-                    // and check type compatibility here
-                    println!("Analyzing let statement at {:?}", span);
-                }
-                _ => {}
-            }
-        }
-        Ok(())
     }
 }
