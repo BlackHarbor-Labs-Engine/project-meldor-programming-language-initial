@@ -46,7 +46,7 @@ mod tests {
         let tokens = lexer::lexer(input).unwrap();
         
         // This should not panic
-        let result = analyzer.analyze(tokens);
+        let result = analyzer.analyze(&tokens);
         assert!(result.is_ok());
     }
 
