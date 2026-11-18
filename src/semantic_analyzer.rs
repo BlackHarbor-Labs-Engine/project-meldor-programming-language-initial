@@ -73,22 +73,22 @@ impl DependencyGraph {
         DependencyGraph { nodes: HashMap::new() }
     }
 
-    pub fn add_node(&mut self, node: String) {
+    // pub fn add_node(&mut self, node: String) {
         self.nodes.entry(node).or_insert_with(Vec::new);
     }
 
-    pub fn add_edge(&mut self, from: String, to: String) {
+    // pub fn add_edge(&mut self, from: String, to: String) {
         self.nodes.entry(from).or_insert_with(Vec::new).push(to);
     }
 
-    pub fn get_nodes(&self) -> &HashMap<String, Vec<String>> {
+    // pub fn get_nodes(&self) -> &HashMap<String, Vec<String>> {
         &self.nodes
     }
 }
 
-pub struct SemanticAnalyzer {
+// pub struct SemanticAnalyzer {
     scopes: Vec<Scope>,
-    types: HashMap<String, Type>,
+    // types: HashMap<String, Type>,
 }
 
 impl SemanticAnalyzer {
@@ -104,15 +104,15 @@ impl SemanticAnalyzer {
         self.scopes.push(Scope::with_parent(parent));
     }
 
-    pub fn exit_scope(&mut self) {
+    // pub fn exit_scope(&mut self) {
         self.scopes.pop();
     }
 
-    pub fn current_scope(&mut self) -> &mut Scope {
+    // pub fn current_scope(&mut self) -> &mut Scope {
         self.scopes.last_mut().unwrap()
     }
 
-    pub fn resolve_type(&self, name: &str) -> Option<&Type> {
+    // pub fn resolve_type(&self, name: &str) -> Option<&Type> {
         if let Some(ty) = self.types.get(name) {
             Some(ty)
         } else {
@@ -120,7 +120,7 @@ impl SemanticAnalyzer {
         }
     }
 
-    pub fn add_type(&mut self, name: String, ty: Type) {
+    // pub fn add_type(&mut self, name: String, ty: Type) {
         self.types.insert(name, ty);
     }
 
