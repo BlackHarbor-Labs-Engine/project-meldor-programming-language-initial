@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 fn process_state_machine(state: &HashMap<String, String>) -> Result<(), String> {
     // Implementation goes here
+    Ok(())
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -58,8 +59,9 @@ impl ResourceManager {
                 } else {
                     Err(format!("Resource {} is not idle", id))
                 }
+            } else {
+                Err(format!("Resource {} does not exist", id)),
             }
-            None => Err(format!("Resource {} does not exist", id)),
         }
     }
 
@@ -72,8 +74,9 @@ impl ResourceManager {
                 } else {
                     Err(format!("Resource {} is not in use", id))
                 }
+            } else {
+                Err(format!("Resource {} does not exist", id)),
             }
-            None => Err(format!("Resource {} does not exist", id)),
         }
     }
 
@@ -86,8 +89,9 @@ impl ResourceManager {
                 } else {
                     Err(format!("Resource {} is not released", id))
                 }
+            } else {
+                Err(format!("Resource {} does not exist", id)),
             }
-            None => Err(format!("Resource {} does not exist", id)),
         }
     }
 
@@ -103,9 +107,5 @@ impl ResourceManager {
             }
             None => Err(format!("Resource {} does not exist", id)),
         }
-    }
-
-    pub fn get_data(&self, id: u32) -> Option<&String> {
-        self.resources.get(&id).and_then(|r| r.data.as_ref())
     }
 }

@@ -1,59 +1,42 @@
-#[derive(Debug, Clone)]
-pub struct Span {
-    pub line: u32,
-    pub col: u32,
-    pub start: usize,
-    pub end: usize,
-}
-
-impl Span {
-    pub fn new(line: u32, col: u32, start: usize, end: usize) -> Self {
-        Span { line, col, start, end }
-    }
-}
+// src/syntax.rs
+//! Defines the core Abstract Syntax Tree (AST) nodes and structural elements for Meldor.
 
 use std::fmt;
 
+/// Represents the positional span of a token/node in the source code.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Span {
+    pub start: usize,
+    pub end: usize,
+    pub line: usize,
+    pub column: usize,
+}
+
+impl Span {
+    pub fn new(start: usize, end: usize, line: usize, column: usize) -> Self {
+        Span { start, end, line, column }
+    }
+}
+
+/// Enumeration of all possible types in Meldor.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum Type {
+    Int,
+    String,
+    Bool,
+    Unknown,
+}
+
+/// The core structure representing a node in the Abstract Syntax Tree.
 #[derive(Debug, Clone)]
 pub enum SyntaxNode {
+    // Lexical Tokens
     Keyword(String),
-    Literal { value: String, span: Span },
     Identifier(String),
-}
+    Literal { value: String, span: Span },
 
-impl fmt::Display for SyntaxNode {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            SyntaxNode::Keyword(s) => write!(f, "{}", s),
-            SyntaxNode::Literal { value, .. } => write!(f, "{}", value),
-            SyntaxNode::Identifier(s) => write!(f, "{}", s),
-        }
-    }
-}
-
-
-
-// This function is not used in the current code but we'll keep it for completeness
-pub fn parse_literal(input: &str) -> Result<(&str, SyntaxNode), SyntaxNode> {
-    // Simplified version - in practice this would be more complex
-    if input.starts_with(|c: char| c.is_ascii_digit()) {
-        let mut end = 0;
-        for (i, c) in input.chars().enumerate() {
-            if c.is_ascii_digit() {
-                end = i + 1;
-            } else {
-                break;
-            }
-        }
-        let number_str = &input[..end];
-        Ok((
-            &input[end..],
-            SyntaxNode::Literal { 
-                value: number_str.to_string(), 
-                span: Span::new(0, 0, 0, 0) 
-            }
-        ))
-    } else {
-        Err(SyntaxNode::Keyword("unknown".to_string()))
-    }
+    // AST Structure
+    Declaration { name: String, ty: Type },
+    Assignment { name: String, value_node: SyntaxNode },
+    // ... other nodes like BinaryOp, FunctionCall, etc. would go here
 }
