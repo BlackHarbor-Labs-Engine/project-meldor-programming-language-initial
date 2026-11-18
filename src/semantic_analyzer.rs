@@ -1,7 +1,7 @@
-use crate::syntax::{NodeType, LiteralNode, SyntaxNode};
+use crate::syntax::{NodeType, SyntaxNode};
 
 /// Analyzes a slice of SyntaxNodes for semantic correctness.
-pub fn analyze_syntax_nodes(nodes: &[SyntaxNode]) -> Result<(), String> {
+pub fn analyze(nodes: &[SyntaxNode]) -> Result<(), String> {
     for node in nodes {
         if let Err(e) = analyze_node(node) {
             return Err(e);
@@ -13,7 +13,7 @@ pub fn analyze_syntax_nodes(nodes: &[SyntaxNode]) -> Result<(), String> {
 /// Helper function to analyze a single node.
 fn analyze_node(node: &SyntaxNode) -> Result<(), String> {
     match &node.kind {
-        NodeType::BinaryOp { left, right, op } => {
+        NodeType::BinaryOp { left, right, op: _ } => {
             if matches!(&left.kind, NodeType::UnknownNode) || matches!(&right.kind, NodeType::UnknownNode) {
                 return Err("Semantic Error: Binary operation involves an unknown node.".to_string());
             }
