@@ -11,36 +11,24 @@ fn main() {
     println!("Tokens: {:?}", tokens);
 
     // 2. Parsing
-    println!("
-=== Parsing ===");
+    println!("\n=== Parsing ===");
     let parser = parser::Parser::new();
     let syntax_tree = parser.parse(&tokens).unwrap();
-    println!("Syntax Tree: {:?}", syntax_tree);
+    println!("Syntax Tree: {:?}");
 
-    // 3. Engine Setup & Analysis
-    println!("
-=== Engine Setup & Analysis ===");
+    // 3. Runtime Orchestration & Execution
     let malware_engine = malware_engine::MalwareEngine::new();
     let builder = ir::IrBuilder::new();
-    
-    let mut engine = engine::Engine::new(malware_engine, builder);
-    
-    // Perform semantic analysis and risk check
-    match engine.analyze_and_plan(&syntax_tree) {
-        Ok(_) => println!("Engine: Analysis and planning successful."),
-        Err(e) => { 
-            eprintln!("Engine Error during analysis: {}", e);
-            return;
-        }
-    }
 
-    // 4. Execution
-    println!("
-=== Execution ===");
-    match engine.execute(&syntax_tree) {
-        Ok(_) => println!("Execution finished successfully."),
-        Err(e) => { 
-            eprintln!("Engine Error during execution: {}", e);
+    // Initialize the full runtime environment
+    let mut runtime = runtime::Runtime::new(malware_engine, builder);
+
+    // Run the entire lifecycle: Analyze -> Execute, controlled by StateMachine
+    println!("\n=== Running Meldor Lifecycle ===");
+    match runtime.run(&syntax_tree) {
+        Ok(_) => println!("Lifecycle completed successfully."),
+        Err(e) => {
+            eprintln!("Runtime Error during lifecycle: {}");
             return;
         }
     }
