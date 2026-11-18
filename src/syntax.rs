@@ -48,12 +48,12 @@ pub enum NodeType {
     Declaration { name: String, ty: Type },
     Assignment { name: String, value_node: Box<SyntaxNode> },
     BinaryOp { left: Box<SyntaxNode>, right: Box<SyntaxNode>, op: String },
-    Literal(LiteralNode), // <-- Correctly using LiteralNode
+    Literal(LiteralNode),
     Identifier(String),
     UnknownNode,
 }
 
-// --- Token Definitions (Fix for parser.rs) ---
+// --- Token Definitions (FIXED) ---
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum TokenKind {
@@ -62,13 +62,8 @@ pub enum TokenKind {
     Operator(String),
     LParen,
     RParen,
-    // ... other kinds
-    Declaration { name: String, ty: Type },
-    Assignment { name: String, value_node: Box<SyntaxNode> },
-    BinaryOp { left: Box<SyntaxNode>, right: Box<SyntaxNode>, op: String },
-    Literal(LiteralNode),
-    Identifier(String),
-    UnknownNode,
+    // Primitive tokens only
+    Unknown, 
 }
 
 #[derive(Debug, Clone, PartialEq)]

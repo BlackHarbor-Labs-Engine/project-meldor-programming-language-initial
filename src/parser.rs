@@ -1,5 +1,5 @@
 use crate::lexer::Token;
-use crate::syntax::{ParseError, SyntaxNode, NodeType, LiteralNode};
+use crate::syntax::{ParseError, SyntaxNode, NodeType, LiteralNode, TokenKind};
 
 pub struct Parser {
     // Parser state fields go here
@@ -28,10 +28,10 @@ impl Parser {
         
         // Safety check: If we assume Token has a kind, we check for literal.
         // Since we lack Token definition, we proceed with the assumption from the original code's intent.
-        if let TokenKind::Literal(value) = &first_token.kind {
+        if let TokenKind::Literal(value) = &first_token { // Assuming Token itself holds the kind or is the kind structure}
              Ok(LiteralNode::Integer(*value))
         } else {
-             Err(ParseError { details: format!("Expected literal token, found {:?}.", first_token.kind)})
+             Err(ParseError { details: format!("Expected literal token, found {:?}.", first_token)})
         }
     }
 }

@@ -104,7 +104,7 @@ impl Runtime {
         }
 
         // Delegate to the engine via the interface abstraction, passing the tracker for tracing
-        self.engine.analyze_and_plan(ast_root, &mut self.taint_tracker).map_err(|e| {
+        self.engine.analyze_and_plan(ast_root).map_err(|e| {
             // If analysis fails, transition to Error state
             let _ = self.state_machine.transition(State::Error);
             format!("Analysis failed: {}", e)
@@ -123,7 +123,7 @@ impl Runtime {
         }
 
         // Delegate to the engine via the interface abstraction, passing the tracker for tracing
-        self.engine.execute(ast_root, &mut self.taint_tracker).map_err(|e| {
+        self.engine.execute(ast_root).map_err(|e| {
             // If execution fails, transition to Error state
             let _ = self.state_machine.transition(State::Error);
             format!("Execution failed: {}", e)
