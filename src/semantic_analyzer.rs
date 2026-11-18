@@ -1,6 +1,15 @@
-use crate::syntax::{Type, SyntaxNode, NodeType, LiteralNode, Value};
+use crate::syntax::{NodeType};
 
-pub fn analyze(node: &SyntaxNode) -> Result<(), String> {
+use crate::syntax::SyntaxNode;
+
+pub fn analyze_syntax_nodes(nodes: &[SyntaxNode]) -> Result<(), String> {
+    for node in nodes {
+        if let Err(e) = analyze(node) {
+            return Err(e);
+        }
+    }
+    Ok(())
+}
     match &node.kind {
         NodeType::BinaryOp { left, right, op } => {
             if matches!(&left.kind, NodeType::UnknownNode) || matches!(&right.kind, NodeType::UnknownNode) {
@@ -12,7 +21,7 @@ pub fn analyze(node: &SyntaxNode) -> Result<(), String> {
             println!("Analyzing Declaration: {} with type {:?}", name, ty);
             Ok(())
         }
-        NodeType::Assignment { name, value_node } => {
+        NodeType::Assignment { name: _, value_node: _ } => {
             Ok(())
         }
         NodeType::Literal(lit_node) => {

@@ -1,3 +1,4 @@
+/* Corrected content for src/syntax.rs */
 use std::fmt;
 use std::error::Error;
 
@@ -10,8 +11,8 @@ pub enum LiteralNode {
 }
 
 #[derive(Debug)]
-pub struct ParseError { 
-    details: String 
+pub struct ParseError {
+    pub details: String 
 }
 
 impl fmt::Display for ParseError {
@@ -52,7 +53,7 @@ pub enum NodeType {
     UnknownNode,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct SyntaxNode {
     pub kind: NodeType,
 }

@@ -1,8 +1,8 @@
-use crate::syntax::{Type, SyntaxNode, NodeType, LiteralNode, Value};
+use crate::syntax::{NodeType, SyntaxNode};
 
 pub fn analyze(node: &SyntaxNode) -> Result<(), String> {
     match &node.kind {
-        NodeType::BinaryOp { left, right, op } => {
+        NodeType::BinaryOp { left, right, op: _ } => {
             if matches!(&left.kind, NodeType::UnknownNode) || matches!(&right.kind, NodeType::UnknownNode) {
                 return Err("Semantic Error: Binary operation involves an unknown node.".to_string());
             }
@@ -12,7 +12,7 @@ pub fn analyze(node: &SyntaxNode) -> Result<(), String> {
             println!("Analyzing Declaration: {} with type {:?}", name, ty);
             Ok(())
         }
-        NodeType::Assignment { name, value_node } => {
+        NodeType::Assignment { name: _, value_node: _ } => {
             Ok(())
         }
         NodeType::Literal(lit_node) => {

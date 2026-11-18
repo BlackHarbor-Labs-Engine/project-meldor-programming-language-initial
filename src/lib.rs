@@ -11,7 +11,7 @@ pub mod syntax;
 
 pub use lexer::Lexer;
 pub use parser::Parser;
-pub use semantic_analyzer::SemanticAnalyzer;
+pub use semantic_analyzer::analyze;
 pub use runtime::Runtime;
 pub use ir::IR;
 

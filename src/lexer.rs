@@ -11,6 +11,11 @@ pub struct Lexer {
 }
 
 impl Lexer {
+    pub fn lexer(input: &str) -> Vec<Token> {
+        let mut lexer = Lexer::new(input);
+        lexer.tokenize()
+    }
+
     pub fn new(input: &str) -> Self {
         let mut lexer = Lexer {
             input: input.to_string(),

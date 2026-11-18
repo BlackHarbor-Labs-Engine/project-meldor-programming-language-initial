@@ -1,11 +1,19 @@
 use crate::lexer::Token;
-use crate::syntax::{LiteralNode, ParseError, SyntaxNode};
+use crate::syntax::{ParseError, SyntaxNode};
 
 pub struct Parser {
     // Parser state fields go here
 }
 
 impl Parser {
+    pub fn parse_statement(tokens: &[Token]) -> Result<SyntaxNode, ParseError> {
+        let mut parser = Parser::new();
+        // Placeholder: In a real system, this would parse a sequence of statements.
+        // For now, we just parse the first literal as a placeholder for the whole tree.
+        let literal_node = parser.literal(tokens)?; 
+        Ok(SyntaxNode { kind: NodeType::Literal(literal_node) }) 
+    }
+
     pub fn new() -> Self {
         Parser {}
     }
