@@ -36,3 +36,11 @@ fn test_parser_multiple_tokens() {
     let result = literal(input);
     assert!(result.is_ok());
 }
+
+#[test]
+fn test_parser_expression() {
+    // Test simple arithmetic expression: 1 + 2 * 3
+    let input = "1 + 2 * 3";
+    let result = literal(input);
+    assert!(result.is_ok());
+}
