@@ -1,14 +1,19 @@
-// src/lib.rs
-//! The main library crate for Meldor.
-
-pub mod syntax;
 pub mod lexer;
-
 pub mod parser;
-pub mod analyze;
-pub mod ir;
+pub mod semantic_analyzer;
 pub mod interpreter;
+pub mod ir;
+pub mod analyze;
+pub mod state_machine;
+pub mod malware_engine;
+pub mod syntax;
 
-// Re-exporting core types for easy access
-pub use syntax::{SyntaxNode, Type, Analyzer};
-pub use analyze::analyze;
+pub use lexer::Lexer;
+pub use parser::Parser;
+pub use semantic_analyzer::SemanticAnalyzer;
+pub use interpreter::Interpreter;
+pub use ir::IR;
+pub use analyze::Analyzer;
+pub use state_machine::StateMachine;
+pub use malware_engine::MalwareEngine;
+pub use syntax::SyntaxNode;
